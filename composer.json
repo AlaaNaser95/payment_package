@@ -1,0 +1,48 @@
+{
+    "name": "beinmedia/payment",
+    "description": ":package_description",
+    "license": "license",
+    "authors": [
+        {
+            "name": "Alaa Naser",
+            "email": "alaanaser@beinmedia.com",
+            "homepage": "https://beinmedia.com"
+        }
+    ],
+    "homepage": "https://github.com/AlaaNaser95/payment_package",
+    "keywords": ["Laravel", "payment"],
+    "require": {
+        "illuminate/support": "~5|~6",
+        "paypal/rest-api-sdk-php": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0",
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "~3|~4",
+        "sempro/phpunit-pretty-print": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "beinmedia\\payment\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "beinmedia\\payment\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "beinmedia\\payment\\paymentServiceProvider"
+            ],
+            "aliases": {
+                "MyFatoorahPayment": "beinmedia\\payment\\Facades\\MyFatoorah",
+                "PaypalPayment": "beinmedia\\payment\\Facades\\Paypal",
+                "TapPayment": "beinmedia\\payment\\Facades\\Tap",
+                "PaypalRecurring": "beinmedia\\payment\\Facades\\PaypalRecurring"
+
+            }
+        }
+    }
+}
