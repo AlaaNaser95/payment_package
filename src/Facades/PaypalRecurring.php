@@ -6,7 +6,7 @@ namespace beinmedia\payment\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class PaypalRecurringPayment extends Facade
+class PaypalRecurring extends Facade
 {
     /**
      * Get the registered name of the component.

@@ -40,7 +40,7 @@
                 "MyFatoorahPayment": "beinmedia\\payment\\Facades\\MyFatoorah",
                 "PaypalPayment": "beinmedia\\payment\\Facades\\Paypal",
                 "TapPayment": "beinmedia\\payment\\Facades\\Tap",
-                "PaypalRecurring": "beinmedia\\payment\\Facades\\PaypalRecurringPayment"
+                "PaypalRecurring": "beinmedia\\payment\\Facades\\PaypalRecurring"
 
             }
         }
