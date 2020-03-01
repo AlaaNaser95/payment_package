@@ -16,8 +16,8 @@ class CreateMyfatoorahPaymentsTable extends Migration
         Schema::create('myfatoorah_payments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer("payment_method_id");
-            $table->string("payment_method");
-            $table->string("currency");
+            $table->string("payment_method")->nullable(true);
+            $table->string("currency")->nullable(true);
             $table->string("payment_url");
             $table->string("customer_reference")->nullable(true);
             $table->string("invoice_status")->nullable(true);
