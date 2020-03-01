@@ -35,7 +35,16 @@ Update the .env configurations below:
 ``` bash
  $ composer dump-autoload
 ```
-## Paypal payment Gateway
+
+## Pyment Gatways
+
+In order to make online payment gatway you need the following:
+1. Create the payment gatway link.
+2. Redirect the customer to the pyment link.
+3. User will pay.
+2. Recieve and validate the payment in the redirect URL you specified in the created payment gatway.
+
+### Paypal payment Gateway
 > **Configuration**
 
 In the .evn file add Paypal credentials as the following example:
@@ -51,8 +60,13 @@ PAYPAL_MODE = (sandbox or live)
 
 > **Usage**
 
+**Methods:**
+
 * *generatePaymentURL($paymentParameters)*
 
+This method will return the payment gateway url where the user should be redirected to in order to complete payment process.
+
+You need to specify the amount , currency, where the user should be redirected after successful payment and the cancel url where the user shoul be redirected after failed or canceled payment.
 ``` bash
 <?php
 
@@ -73,6 +87,7 @@ $paymentLink= PaypalPayment::generatePaymentURL($data);
 ```
 
 * *isPayementExecuted()*
+This method should be called in the redirect url to validate the payment. 
 
 ``` bash
 <?php
@@ -88,7 +103,7 @@ public function checkPaypalPayment (Request $request){
 ```
 ---
 
-##MyFatoorah payment Gateway
+### MyFatoorah payment Gateway
 > **Configuration**
 
 In the .evn file add MyFatoorah api key as the following:
@@ -97,6 +112,16 @@ In the .evn file add MyFatoorah api key as the following:
 MYFATOORAH_API_KEY = 7Fs7eBv21F5xAocdPvvJ-sCqEyNHq4cygJrQUFvFiWEexBUPs4AkeLQxH4pzsUrY3Rays7GVA6SojFCz2DMLXSJVqk8NG-plK-cZJetwWjgwLPub_9tQQohWLgJ0q2invJ5C5Imt2ket_-JAlBYLLcnqp_WmOfZkBEWuURsBVirpNQecvpedgeCx4VaFae4qWDI_uKRV1829KCBEH84u6LYUxh8W_BYqkzXJYt99OlHTXHegd91PLT-tawBwuIly46nwbAs5Nt7HFOozxkyPp8BW9URlQW1fE4R_40BXzEuVkzK3WAOdpR92IkV94K_rDZCPltGSvWXtqJbnCpUB6iUIn1V-Ki15FAwh_nsfSmt_NQZ3rQuvyQ9B3yLCQ1ZO_MGSYDYVO26dyXbElspKxQwuNRot9hi3FIbXylV3iN40-nCPH4YQzKjo5p_fuaKhvRh7H8oFjRXtPtLQQUIDxk-jMbOp7gXIsdz02DrCfQIihT4evZuWA6YShl6g8fnAqCy8qRBf_eLDnA9w-nBh4Bq53b1kdhnExz0CMyUjQ43UO3uhMkBomJTXbmfAAHP8dZZao6W8a34OktNQmPTbOHXrtxf6DS-oKOu3l79uX_ihbL8ELT40VjIW3MJeZ_-auCPOjpE3Ax4dzUkSDLCljitmzMagH2X8jN8-AYLl46KcfkBV
 ```
 > **Usage**
+
+* *getMyFatoorahPaymentMethods($currency,$iso_Code)*
+
+Returns all payment methods for your account with the related fees for each method according to the amount.
+
+``` bash
+    use MyFatoorahPayment;
+
+    $paymentMethods= MyFatoorahPayment::getMyFatoorahPaymentMethods(10,"KWD");
+```
 
 * *generatePaymentURL($paymentParameters)*
 
@@ -119,6 +144,9 @@ $paymentLink = MyFatoorahPayment::generatePaymentURL($data);
 ```
 
 * *isPayementExecuted()*
+
+This method should be called in the redirect url to validate the payment. 
+
 ``` bash
 <?php
 
@@ -134,7 +162,7 @@ public function checkMyFatoorahPayment(Request $request){
 }
 ```
 ---
-# Tap payment Gateway
+### Tap payment Gateway
 > **Configuration**
 
 In the .evn file add Tap api key as the following example:
@@ -146,6 +174,7 @@ FAWRY_API_KEY = sk_test_XKokBfNWv6FIYuTMg5sLPjhJ
 > **Usage**
 
 * *generatePaymentURL($paymentParameters)*
+
 ``` bash
 <?php
 
@@ -157,7 +186,7 @@ use TapPayment;
 
 $data=new PaymentParameters();
 
-$data->email="alaanaser95.95@gmail.com"; //customer email
+$data->email="alaanaser95.95@gmail.com"; // Customer email
 $data->name="Alaa"; //Customer email
 $data->countryCode="965";
 $data->phoneNumber="65080631";
@@ -177,6 +206,9 @@ $paymentLink = TapPayment::generatePaymentURL($data);
 ```
 
 * *isPayementExecuted()*
+
+This method should be called in the redirect url to validate the payment. 
+
 ``` bash
 <?php
 
@@ -189,32 +221,102 @@ public function checkTapPayment (Request $request){
         return ‘fail’;
 }
 ```
-## Change log
+---
+## Paypal recurring payments
 
-Please see the [changelog](changelog.md) for more information on what has changed recently.
+> **Configuration**
 
-## Testing
+At .env file set the following:
 
+(For testing mode)
+- If you are still testing and not live set the testing mode to true.
 ``` bash
-$ composer test
+PAYPAL_RECURRING_TESTING_MODE = true
+```
+- Add your base url for the published version of your project (you can use ngrok for testing. 
+``` bash
+PAYPAL_RECURRING_TESTING_WEBHOOK_URL=https://b2015d91.ngrok.io
 ```
 
-## Contributing
+(For testing & live mode)
+- Specify the webhook url where you will receive post notifications whenever user cancels the agreement or a payment is done for the agreement.(Fully qualified **published** url should be added).
+``` bash
+RECURRING_NOTIFICATION_URL=https://b2015d91.ngrok.io/webhookresponse
+```
 
-Please see [contributing.md](contributing.md) for details and a todolist.
+> **Usage**
 
-## Security
+In order to create agreement for recurring payment you need the followuing:
 
-If you discover any security related issues, please email author email instead of using the issue tracker.
+1. Create a plan to be assigned to the agreement. (Multible agreements can be assigned to the same plan)
+2. Create agreement and get the approval link where the user should be redirectred to accept that agreement.
+3. Execute agreement to process the agreement acceptance and validate agreement acceptance.
+4. Get the post notification whenever payment is completed for any agreement or whenever any agreement is cancelled, so you can give or remove licence to the payer.
+
+**Available Methods:**
+* *createPlan()*
+``` bash
+<?php
+
+use beinmedia\payment\Parameters\PlanParam;
+use PaypalRecurring;
+
+//create planParam object
+$planParam=new PlanParam();
+
+$planParam->planName='Premium Package';
+$planParam->description='Get Full access to all our features';
+$planParam->amount=10;
+$planParam->returnURL=url("/recurring-execute"); // Fully qualified url where the user will be redirected after successful payment.
+$planParam->cancelURL="https://www.tapcom.com/"; // // Fully qualified url where the user will be redirected after failed payment.
+
+//create A plan
+$createdPlanObject= PaypalRecurring::createPlan($planParam);
+```
+
+* *createAgreement($plan_id, $agreement_name, $agreement_description))*
+``` bash
+<?php
+
+use PaypalRecurring;
+
+// Generate agreement url where the user should be redirected to
+$agreementLink = PaypalRecurring::createAgreement('P-3D407875MD555251WQYZQOJA','Alaa','MyAgreement');
+
+```
+* *executeAgreement()*
+
+``` bash
+<?php
+
+use PaypalRecurring;
+
+public function executeAgreement(Request $request){
+
+    return (PaypalRecurring::executeAgreement())?'Success' : 'Fail');
+}
+
+```
+
+* *cancelAgreement($agreement_id)*
+``` bash
+<?php
+
+use PaypalRecurring;
+
+public function cancelAgreement(Request $request){
+
+    return PaypalRecurring::cancelAgreement('I-975S8RWXLGMU');
+}
+```
+
+
 
 ## Credits
 
 - [author name][link-author]
 - [All Contributors][link-contributors]
 
-## License
-
-license. Please see the [license file](license.md) for more information.
 
 [ico-version]: https://img.shields.io/packagist/v/beinmedia/payment.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/beinmedia/payment.svg?style=flat-square
