@@ -1,7 +1,7 @@
 {
     "name": "beinmedia/payment",
     "description": ":package_description",
-    "license": "license",
+    "license": "proprietary",
     "authors": [
         {
             "name": "Alaa Naser",
@@ -41,7 +41,6 @@
                 "PaypalPayment": "beinmedia\\payment\\Facades\\Paypal",
                 "TapPayment": "beinmedia\\payment\\Facades\\Tap",
                 "PaypalRecurring": "beinmedia\\payment\\Facades\\PaypalRecurring"
-
             }
         }
     }
