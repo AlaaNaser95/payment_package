@@ -59,6 +59,7 @@ class PaypalGateway implements PaymentInterface
             $paypalPayment->payment_id=$payment->getId();
             $paypalPayment->state=$payment->getState();
             $paypalPayment->amount=$total;
+            $paypalPayment->type="paypal";
             $paypalPayment->currency=$currency;
             $paypalPayment->create_time=$payment->getCreateTime();
             $paypalPayment->approval_link=$payment->getApprovalLink();

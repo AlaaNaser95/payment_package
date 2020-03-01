@@ -15,7 +15,7 @@ class CreateAgreementsTable extends Migration
     {
         Schema::create('agreements', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('agreement_id')->nullable(true);
+            $table->string('agreement_id')->nullable(true)->index();
             $table->string('gateway');
             $table->string('description');
             $table->string('state')->default('active');
