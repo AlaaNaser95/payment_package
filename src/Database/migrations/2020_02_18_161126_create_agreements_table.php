@@ -25,7 +25,7 @@ class CreateAgreementsTable extends Migration
             $table->string('cycles_remaining');
             $table->string('next_billing_date')->nullable(true);
             $table->string('last_payment_date')->nullable(true);
-            $table->foreign('plan_id')->references('plan_id')->on('OurPlans');
+            $table->foreign('plan_id')->references('plan_id')->on('our_plans');
             $table->timestamps();
         });
     }
