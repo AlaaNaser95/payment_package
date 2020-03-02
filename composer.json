@@ -1,6 +1,6 @@
 {
     "name": "beinmedia/payment",
-    "description": ":package_description",
+    "description": "Laravel package to implement MyFatoorah, Tap, PayPal payment gatways and paypal recurring billing.",
     "license": "proprietary",
     "authors": [
         {
