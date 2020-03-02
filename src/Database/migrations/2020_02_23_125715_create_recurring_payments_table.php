@@ -16,6 +16,8 @@ class CreateRecurringPaymentsTable extends Migration
         Schema::create('recurring_payments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('pay_id');
+            $table->float('amount');
+            $table->string('currency');
             $table->string('agreement_id');
             $table->string('state');
             $table->string('payment_date');

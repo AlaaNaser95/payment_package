@@ -7,6 +7,7 @@ use beinmedia\payment\Services\PaypalRecurring;
 use beinmedia\payment\Services\TapGateway;
 use beinmedia\payment\Services\MyFatoorahGateway;
 use beinmedia\payment\Services\PaypalGateway;
+use beinmedia\payment\Services\PaymentsService;
 use Illuminate\Support\ServiceProvider;
 
 class paymentServiceProvider extends ServiceProvider
@@ -63,7 +64,9 @@ class paymentServiceProvider extends ServiceProvider
         $this->app->singleton('paypalRecurring', function ($app) {
             return new PaypalRecurring();
         });
-
+        $this->app->singleton('payments', function ($app) {
+            return new PaymentsService();
+        });
         $this->commands($this->commands);
 
     }

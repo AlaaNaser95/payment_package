@@ -337,12 +337,16 @@ class PaypalRecurring
 
             $agreementDetails = $agreement->getAgreementDetails();
 
+
+
             //save the payment in database
             $recurring = new Recurring();
             $recurring->state = $data['state'];
             $recurring->pay_id = $data['id'];
             $recurring->agreement_id = $data['billing_agreement_id'];
             $recurring->payment_date = $data['create_time'];
+            $recurring->amount = $data['amount']['total'];
+            $recurring->currency= $data['amount']['currency'];
             $recurring->save();
 
             //update agreement in database
