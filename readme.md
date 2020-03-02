@@ -243,6 +243,15 @@ PAYPAL_RECURRING_TESTING_WEBHOOK_URL=https://b2015d91.ngrok.io
 ``` bash
 RECURRING_NOTIFICATION_URL=https://b2015d91.ngrok.io/webhookresponse
 ```
+**Create webhook**
+
+This webhook needs to be created only once while live to allow the package recieve notifications from paypal.
+
+``` bash
+ $ php artisan create:webhook
+```
+
+If you are using ngrok for testing you need to reset the related data at env file and recreate the webhook every 7 hours.
 
 > **Usage**
 

@@ -116,8 +116,10 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
             //update status in database
             $payment= MyFatoorah::where('invoice_id',$invoiceId)->first();
             $payment->invoice_status=$status;
-            $payment->payment_method = $response["Data"]["InvoiceTransactions"]["PaymentGateway"];
-            $payment->currency = $response["Data"]["InvoiceTransactions"]["Currency"];
+            $payment->currency = $response["Data"]["InvoiceTransactions"][0]["Currency"];
+            $payment->payment_method = $response["Data"]["InvoiceTransactions"][0]["PaymentGateway"];
+            $payment->payment_id = $response["Data"]["InvoiceTransactions"][0]["PaymentId"];
+
             $payment->json=$responseData;
             $payment->save();
 

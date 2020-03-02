@@ -16,6 +16,7 @@ class CreatePaypalPaymentsTable extends Migration
         Schema::create('paypal_payments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('payment_id');
+            $table->string('payer_id')->nullable(true);
             $table->string('state');
             $table->string('currency');
             $table->float('amount');

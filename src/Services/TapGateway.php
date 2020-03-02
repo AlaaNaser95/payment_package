@@ -65,7 +65,7 @@ class TapGateway extends Curl implements PaymentInterface
                 $newCharge->description = $response['description'];
                 $newCharge->source_id = $response['source']['id'];
                 $newCharge->transaction_url = $response['transaction']['url'];
-                $newCharge->transaction_created = $response['transaction']['gcreated'];
+                $newCharge->transaction_created = $response['transaction']['created'];
                 if($response['source']['id']=="src_eg.fawry"){
                     $newCharge->order_reference= $response['transaction']['order']['reference'];
                 }

@@ -298,6 +298,13 @@ class PaypalRecurring
             }'
         );
 
+        //will get notified once the agreement is cancelled
+        $webhookEventTypes[] = new \PayPal\Api\WebhookEventType(
+            '{
+                "name":"BILLING.SUBSCRIPTION.CANCELLED"
+            }'
+        );
+
         //will get notified once the billing payment is done
         $webhookEventTypes[] = new \PayPal\Api\WebhookEventType(
             '{
