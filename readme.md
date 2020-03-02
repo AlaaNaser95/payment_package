@@ -319,6 +319,16 @@ public function cancelAgreement(Request $request){
 }
 ```
 
+## Getting Payment lists
+At some point you may need to get all completed payments for the sake of statistics. The package offers this feature by `getAllPayments()` method.
+>**Usage**
+``` bash
+use Payments;
+
+//returns all completed payments through Tap, Myfatoorah, paypal and paypal recurring payments.
+
+$all_payments = Payments::getAllPayments();
+```
 
 
 ## Credits
