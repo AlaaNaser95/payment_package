@@ -3,9 +3,12 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Build Status][ico-travis]][link-travis]
-[![StyleCI][ico-styleci]][link-styleci]
 
 laravel package, that implements MyFatoorah, Tap , PayPal payment gatways and paypal recurring billing.
+
+## Requirements
+* laravel/framework 5.7.*
+* PHP 7.1.3
 
 ## Installation
 
@@ -231,7 +234,7 @@ $data->countryCode="965";
 $data->phoneNumber="65080631";
 $data->amount=10; // float amount
 $data->description="dfghjk";
-$data->paymentMethodId="src_eg.fawry";//fawry is not giving url any more
+$data->paymentMethodId="src_eg.fawry";
 $data->currency="EGP"; // Iso currency
 
 // For fawry only - To get notification once the payment is completed (Asyncronous payment)
