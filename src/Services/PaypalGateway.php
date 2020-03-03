@@ -83,7 +83,7 @@ class PaypalGateway implements PaymentInterface
         $paymentId=request('paymentId');
 
         //retrieve payment from database
-        $internalPayment=Paypal::where('payment_id',$paymentId)->first();
+        $internalPayment=$this->getPayment($paymentId);
         $payerId = request('PayerID');
 
         //retrieve payment from paypal
@@ -116,5 +116,11 @@ class PaypalGateway implements PaymentInterface
         } catch (Exception $ex) {
             die($ex);
         }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function getPayment($payment_id){
+        return Paypal::where('payment_id',$payment_id)->first();
     }
 }

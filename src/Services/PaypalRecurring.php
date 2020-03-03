@@ -379,11 +379,10 @@ class PaypalRecurring
             $ourAgreement->save();
 
             $data='{"event_type" : '.$event_type.' ,"agreement_id" : '.$agreementId.'}';
+            $url=env('RECURRING_NOTIFICATION_URL','');
 
             try {
-
-                $this->notifyUser($data);
-
+                $this->notifyUser($data,$url);
             }
             catch(Exception $ex){
 
@@ -395,28 +394,6 @@ class PaypalRecurring
     }
 
     //
-    protected function notifyUser($data)
-    {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => env('RECURRING_NOTIFICATION_URL', ''),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => $data
-        ));
-
-        $result = new \stdClass();
-        $result->response = curl_exec($curl);
-        $result->err = curl_error($curl);
-        curl_close($curl);
-
-        return $result;
-    }
 
 
 }

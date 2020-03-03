@@ -15,7 +15,6 @@ class TapGateway extends Curl implements PaymentInterface
         {
             //create object to be converted to request body
             $chargeParam=new ChargeParam();
-
             $chargeParam->customer=new Client();
             $chargeParam->customer->phone=new Phone($data->countryCode,$data->phoneNumber);
             $chargeParam->customer->email=$data->email;
@@ -25,9 +24,17 @@ class TapGateway extends Curl implements PaymentInterface
             $chargeParam->source=new Source($data->paymentMethodId);
             $chargeParam->currency=$data->currency;
 
+            $url=$data->postURL;
+
             if($data->paymentMethodId=='src_eg.fawry'){
 
+                //will set the post url to the pacakage route to process the payment once payed.
+                //the package will send post curl request to the user defiened postURl
                 $chargeParam->post = new Post($data->postURL);
+                if(env('FAWRY_TESTING_MODE'))
+                    $chargeParam->post = new Post(env('FAWRY_TESTING_PUBLISHED_BASE_URL').'/fawry-check');
+                else
+                    $chargeParam->post = new Post(url('/fawry-check'));
 
                 //this is only for make tap return for me a payment url
                 $chargeParam->redirect = new Redirect("https://beinmedia.com");
@@ -55,9 +62,10 @@ class TapGateway extends Curl implements PaymentInterface
                 return "cURL Error #:" . $err;
             }
             else {
+
                 //create new charge in the database
-                //dd($response);
                 $newCharge = new Tap();
+
                 $newCharge->charge_id = $response['id'];
                 $newCharge->amount = $response['amount'];
                 $newCharge->currency = $response['currency'];
@@ -68,6 +76,8 @@ class TapGateway extends Curl implements PaymentInterface
                 $newCharge->transaction_created = $response['transaction']['created'];
                 if($response['source']['id']=="src_eg.fawry"){
                     $newCharge->order_reference= $response['transaction']['order']['reference'];
+                    $newCharge->post_url= $url;
+
                 }
                 $newCharge->save();
 
@@ -95,16 +105,17 @@ class TapGateway extends Curl implements PaymentInterface
                 $jsonResponse=$result->response;
                 $err=$result->err;
                 $response = json_decode($jsonResponse, true);
-                //dd($response);
+
                 if ($err) {
                     return "cURL Error #:" . $err;
                 }
                 else {
-                    $charge=Tap::where('charge_id',$chargeId)->first();
+
+                    $charge=$this->getPayment($chargeId);
 
                     if($response['status']=='CAPTURED' or $response['status']=='APPROVED'){
+
                         //update charge entry in database
-                        //dd($charge);
                         $charge->status="CAPTURED";
                         $charge->json=$jsonResponse;
                         $charge->payment_method=$response['source']['payment_method'];
@@ -124,7 +135,8 @@ class TapGateway extends Curl implements PaymentInterface
             //not tested yet
             //if PostURl is given in the request body
             else {
-                $hashString = request('header.hashstring');
+                $hashString = getallheaders();
+                $hashString = $hashString['hashstring'];
                 $id = request('charge.id');
                 $amount = request('charge.amount');
                 $currency = request('charge.currency');
@@ -135,12 +147,18 @@ class TapGateway extends Curl implements PaymentInterface
                 $SecretAPIKey = env('TAP_API_KEY', '');
                 $toBeHashedString = 'x_id' . $id . 'x_amount' . $amount . 'x_currency' . $currency . 'x_gateway_reference' . $gateway_reference . 'x_payment_reference' . $payment_reference . 'x_status' . $status . 'x_created' . $created . '';
                 $myHashString = hash_hmac('sha256', $toBeHashedString, $SecretAPIKey);
-                if ($myHashString == request('header' . 'hashstring')) {
+                if ($myHashString == $hashString) {
                     echo "Secure Post";
-                    $savedCharge = Tap::where('charge_id', $id)->first();
+                    $savedCharge = $this->getPayment($id);
                     $savedCharge->status = $status;
                     $savedCharge->save();
-
+                    $data='{"charge_id" : '.$id.' ,"status" : '.$status.'}';
+                    try{
+                        $post_url=$this->getPayment($id);
+                        return $this->notifyUser($data,$post_url);
+                    }catch(Exception $ex){
+                        die($ex);
+                    }
                     return $status;
                 } else {
                     return "Insecure Post";
@@ -148,4 +166,19 @@ class TapGateway extends Curl implements PaymentInterface
                 }
             }
         }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public function getPayment($charge_id){
+            return Tap::where('charge_id',$charge_id)->first();
+        }
+
+
+
+
+
+
+
 }
+
+

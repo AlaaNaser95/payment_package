@@ -101,6 +101,14 @@ public function checkPaypalPayment (Request $request){
         return 'fail';
 }
 ```
+
+* *getPayment($payment_id)*
+This method returns the related paypal payment details according to the given payment_id.
+``` bash
+use PaypalPayment;
+
+$paypal_payment = PaypalPayment::getPayment($payment_id);
+```
 ---
 
 ### MyFatoorah payment Gateway
@@ -125,6 +133,7 @@ Returns all payment methods for your account with the related fees for each meth
 
 * *generatePaymentURL($paymentParameters)*
 
+This method will return the payment gateway url where the user should be redirected to in order to complete payment process.``` bash
 ``` bash
 <?php
 
@@ -161,6 +170,16 @@ public function checkMyFatoorahPayment(Request $request){
 
 }
 ```
+* *getPayment($invoice_id)*
+
+This method returns the related MyFatoorah payment details according to the given incoice id.
+
+``` bash
+use MyFatoorahPayment;
+
+$paypal_payment = MyFatoorahPayment::getPayment($payment_id);
+```
+
 ---
 ### Tap payment Gateway
 > **Configuration**
@@ -168,10 +187,30 @@ public function checkMyFatoorahPayment(Request $request){
 In the .evn file add Tap api key as the following example:
 
 ``` bash
-FAWRY_API_KEY = sk_test_XKokBfNWv6FIYuTMg5sLPjhJ
+TAP_API_KEY = sk_test_XKokBfNWv6FIYuTMg5sLPjhJ
+```
+**Fawry**
+(For testing mode)
+- If you are still testing and not live set the testing mode to true.
+
+``` bash
+FAWRY_TESTING_MODE=true
+```
+- Add your base url for the published version of your project (you can use ngrok for testing).
+ 
+``` bash
+FAWRY_TESTING_PUBLISHED_BASE_URL=https://789fbf71.ngrok.io
 ```
 
 > **Usage**
+
+**Fawry Gateway**
+
+Fawry has different structure, the payment is validated asynchronously.
+You need to set postURL where you will get notified once the payment is completed.
+No need to set redirectURL.
+
+**Methods**
 
 * *generatePaymentURL($paymentParameters)*
 
@@ -319,6 +358,31 @@ public function cancelAgreement(Request $request){
 }
 ```
 
+* *cancelAgreement($agreement_id)*
+``` bash
+<?php
+
+use PaypalRecurring;
+
+public function cancelAgreement(Request $request){
+
+    return PaypalRecurring::cancelAgreement('I-975S8RWXLGMU');
+}
+```
+
+* *checkAgreementPayed($agreement_id)*
+
+``` bash
+<?php
+
+use PaypalRecurring;
+
+public function cancelAgreement(Request $request){
+
+    return PaypalRecurring::checkAgreementPayed('I-975S8RWXLGMU');
+}
+```
+
 ## Getting Payment lists
 At some point you may need to get all completed payments for the sake of statistics. The package offers this feature by `getAllPayments()` method.
 >**Usage**
@@ -330,11 +394,36 @@ use Payments;
 $all_payments = Payments::getAllPayments();
 ```
 
+## Samples for Post notification body
+* Fawry
+``` bash
+    {
+        "charge_id" : "chg_Nj545620201224Zq450303159" ,
+        "status" : "CAPTURED"
+    }
+```
+
+* Paypal Recurring payment
+
+Once Recurring payment is completed:
+``` bash
+    {
+        "event_type" : "PAYMENT.SALE.COMPLETED" ,
+        "agreement_id" : "I-PE7JWXKGVN0R",
+        "payment_id" : "80021663DE681814L"
+    }
+```
+Once Recurring payment is cancelled:
+``` bash
+    {
+        "event_type" : "PAYMENT.SALE.COMPLETED" ,
+        "agreement_id" : "I-PE7JWXKGVN0R"
+    }
+```
 
 ## Credits
 
-- [author name][link-author]
-- [All Contributors][link-contributors]
+- [Alaa Naser][link-author]
 
 
 [ico-version]: https://img.shields.io/packagist/v/beinmedia/payment.svg?style=flat-square
@@ -346,5 +435,5 @@ $all_payments = Payments::getAllPayments();
 [link-downloads]: https://packagist.org/packages/beinmedia/payment
 [link-travis]: https://travis-ci.org/beinmedia/payment
 [link-styleci]: https://styleci.io/repos/12345678
-[link-author]: https://github.com/beinmedia
+[link-author]: https://github.com/AlaaNaser95
 [link-contributors]: ../../contributors

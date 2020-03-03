@@ -113,17 +113,20 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         } else {
 
             $status=$response["Data"]["InvoiceStatus"];
-            //update status in database
-            $payment= MyFatoorah::where('invoice_id',$invoiceId)->first();
-            $payment->invoice_status=$status;
-            $payment->currency = $response["Data"]["InvoiceTransactions"][0]["Currency"];
-            $payment->payment_method = $response["Data"]["InvoiceTransactions"][0]["PaymentGateway"];
-            $payment->payment_id = $response["Data"]["InvoiceTransactions"][0]["PaymentId"];
 
-            $payment->json=$responseData;
-            $payment->save();
-
+            //update payment in database if paid
             if($status=='Paid'){
+
+                //get payment from database
+                $payment = $this->getPayment($invoiceId);
+
+                $payment->invoice_status = $status;
+                $payment->currency = $response["Data"]["InvoiceTransactions"][0]["Currency"];
+                $payment->payment_method = $response["Data"]["InvoiceTransactions"][0]["PaymentGateway"];
+                $payment->payment_id = $response["Data"]["InvoiceTransactions"][0]["PaymentId"];
+
+                $payment->json = $responseData;
+                $payment->save();
                 return true;
             }
 
@@ -132,4 +135,10 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
 
     }
 
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function getPayment($invoice_Id){
+        return MyFatoorah::where('invoice_id',$invoice_Id)->first();
+    }
 }

@@ -25,6 +25,7 @@ class CreateTapPaymentsTable extends Migration
                 $table->string('order_reference')->nullable(true);
                 $table->string('transaction_created');
                 $table->string('transaction_url');
+                $table->string('post_url')->nullable(true);
                 $table->json('json')->nullable(true);
                 $table->timestamps();
             });

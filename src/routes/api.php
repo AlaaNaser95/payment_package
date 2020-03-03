@@ -9,5 +9,6 @@ Route::group([
     function(){
 
         Route::post('/webhookresponse', 'WebhookController@webhookResponse');
+        Route::post('/fawry-check', 'FawryController@fawryCheck');
 
     });
