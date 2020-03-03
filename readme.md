@@ -416,7 +416,7 @@ Once Recurring payment is completed:
 Once Recurring payment is cancelled:
 ``` bash
     {
-        "event_type" : "PAYMENT.SALE.COMPLETED" ,
+        "event_type" : "BILLING.SUBSCRIPTION.CANCELLED" ,
         "agreement_id" : "I-PE7JWXKGVN0R"
     }
 ```
