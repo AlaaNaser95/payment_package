@@ -18,10 +18,9 @@ use PayPal\Api\PatchRequest;
 use PayPal\Common\PayPalModel;
 use PayPal\Api\Payer;
 use PayPal\Api\AgreementStateDescriptor;
-use \PayPal\Api\VerifyWebhookSignature;
+use beinmedia\payment\Services\Curl;
 
-
-class PaypalRecurring
+class PaypalRecurring extends Curl
 {
     private $apiContext;
 
