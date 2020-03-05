@@ -7,6 +7,17 @@ use beinmedia\payment\Parameters\MyfatoorahParam;
 
 class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\PaymentInterface
 {
+    protected $baseURL;
+
+    public function __construct()
+    {
+        if (env('MYFATOORAH_TEST_MODE')) {
+            $this->baseURL = "https://apitest.myfatoorah.com/v2";
+        } else {
+            $this->baseURL = "https://api.myfatoorah.com/v2";
+        }
+    }
+
 
     //return all payment methods available for the account
     public function getMyFatoorahPaymentMethods($invoiceAmount,$currency){
@@ -16,7 +27,7 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $data->CurrencyIso=$currency;
         $data = json_encode($data);
 
-        $result=$this->postCurl("https://apitest.myfatoorah.com/v2/InitiatePayment",$data,env('MYFATOORAH_API_KEY'));
+        $result=$this->postCurl(($this->baseURL."/InitiatePayment"),$data,env('MYFATOORAH_API_KEY'));
 
         $response=$result->response;
         $err=$result->err;
@@ -54,7 +65,7 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $data=json_encode($data);
 
 
-        $result=$this->postCurl("https://apitest.myfatoorah.com/v2/ExecutePayment",$data,env('MYFATOORAH_API_KEY'));
+        $result=$this->postCurl(($this->baseURL."/ExecutePayment"),$data,env('MYFATOORAH_API_KEY'));
         $response=$result->response;
         $err=$result->err;
         $response = json_decode($response, true);
@@ -100,7 +111,7 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $data->KeyType="PaymentId";
         $data = json_encode($data);
 
-        $result=$this->postCurl("https://apitest.myfatoorah.com/v2/GetPaymentStatus",$data,env('MYFATOORAH_API_KEY'));
+        $result=$this->postCurl(($this->baseURL."/GetPaymentStatus"),$data,env('MYFATOORAH_API_KEY'));
         $response=$result->response;
         $err=$result->err;
         $responseData=$response;
