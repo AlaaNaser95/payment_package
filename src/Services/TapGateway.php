@@ -30,7 +30,7 @@ class TapGateway extends Curl implements PaymentInterface
 
                 //will set the post url to the pacakage route to process the payment once payed.
                 //the package will send post curl request to the user defiened postURl
-                $chargeParam->post = new Post($data->postURL);
+                //$chargeParam->post = new Post($data->postURL);
                 if(env('FAWRY_TESTING_MODE'))
                     $chargeParam->post = new Post(env('FAWRY_TESTING_PUBLISHED_BASE_URL').'/fawry-check');
                 else

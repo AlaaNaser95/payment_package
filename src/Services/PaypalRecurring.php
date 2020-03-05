@@ -359,12 +359,6 @@ class PaypalRecurring
 
             $data='{"event_type" : '.$event_type.' ,"agreement_id" : '.$agreementId.', "payment_id" : '.$data['id'].'}';
 
-            try {
-                $this->notifyUser($data);
-            }
-            catch(Exception $ex){
-                die($ex);
-            }
 
         }
 
@@ -379,21 +373,20 @@ class PaypalRecurring
             $ourAgreement->save();
 
             $data='{"event_type" : '.$event_type.' ,"agreement_id" : '.$agreementId.'}';
-            $url=env('RECURRING_NOTIFICATION_URL','');
 
-            try {
-                $this->notifyUser($data,$url);
-            }
-            catch(Exception $ex){
+        }
 
-                die($ex);
+        $url=env('RECURRING_NOTIFICATION_URL','');
 
-            }
+        try {
+            $this->notifyUser($data,$url);
+        }
+        catch(Exception $ex){
+
+            die($ex);
 
         }
     }
-
-    //
 
 
 }
