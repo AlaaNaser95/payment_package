@@ -25,7 +25,7 @@ class PaypalGateway implements PaymentInterface
     public function generatePaymentURL($data)
     {
         $currency=$data->currency;
-        $total=($data->amount).'';
+        //$total=($data->amount).'';
         $returnURL=$data->returnURL;
         $cancelURL=$data->cancelURL;
 
@@ -33,7 +33,7 @@ class PaypalGateway implements PaymentInterface
         $payer->setPaymentMethod('paypal');
 
         $amount = new Amount();
-        $amount->setTotal(10);
+        $amount->setTotal($data->amount);
         $amount->setCurrency($currency);
 
         $transaction = new Transaction();
@@ -58,7 +58,7 @@ class PaypalGateway implements PaymentInterface
             $paypalPayment=new Paypal();
             $paypalPayment->payment_id=$payment->getId();
             $paypalPayment->state=$payment->getState();
-            $paypalPayment->amount=$total;
+            $paypalPayment->amount=$data->amount;
             $paypalPayment->type="paypal";
             $paypalPayment->currency=$currency;
             $paypalPayment->create_time=$payment->getCreateTime();

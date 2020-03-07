@@ -58,10 +58,10 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $data->InvoiceValue=$paymentParameters->amount;
         $data->CallBackUrl=$paymentParameters->returnURL;
         $data->ErrorUrl=$paymentParameters->cancelURL;
-        if($paymentParameters->currency<>null){
+        if(($paymentParameters->currency)<>null){
             $data->DisplayCurrencyIso=$paymentParameters->currency;
         }
-
+        dd($data);
         $data=json_encode($data);
 
 
@@ -115,6 +115,7 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $response=$result->response;
         $err=$result->err;
         $responseData=$response;
+        dd($response);
         $response = json_decode($response, true);
 
         if ($err) {
