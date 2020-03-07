@@ -61,7 +61,6 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         if(($paymentParameters->currency)<>null){
             $data->DisplayCurrencyIso=$paymentParameters->currency;
         }
-        dd($data);
         $data=json_encode($data);
 
 
@@ -115,7 +114,6 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $response=$result->response;
         $err=$result->err;
         $responseData=$response;
-        dd($response);
         $response = json_decode($response, true);
 
         if ($err) {
