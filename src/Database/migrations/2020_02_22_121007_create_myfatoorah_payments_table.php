@@ -23,7 +23,7 @@ class CreateMyfatoorahPaymentsTable extends Migration
             $table->string("customer_reference")->nullable(true);
             $table->string("invoice_status")->nullable(true);
             $table->integer("invoice_id");
-            $table->float("invoice_value");
+            $table->float("invoice_value")->nullable(true);
             $table->json("json")->nullable(true);
             $table->timestamps();
         });

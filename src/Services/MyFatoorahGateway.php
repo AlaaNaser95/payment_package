@@ -11,7 +11,7 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
 
     public function __construct()
     {
-        if (env('MYFATOORAH_TEST_MODE')) {
+        if (env('MYFATOORAH_TEST_MODE')== true) {
             $this->baseURL = "https://apitest.myfatoorah.com/v2";
         } else {
             $this->baseURL = "https://api.myfatoorah.com/v2";
@@ -83,7 +83,7 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
                 $payment->customer_reference = $response["Data"]["CustomerReference"];
                 $data=json_decode($data);
                 $payment->payment_method_id = $data->PaymentMethodId;
-                $payment->invoice_value = $data->InvoiceValue;
+
                 $payment->save();
 
                 return $response["Data"]["PaymentURL"];
@@ -129,12 +129,11 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
 
                 //get payment from database
                 $payment = $this->getPayment($invoiceId);
-
                 $payment->invoice_status = $status;
                 $payment->currency = $response["Data"]["InvoiceTransactions"][0]["Currency"];
                 $payment->payment_method = $response["Data"]["InvoiceTransactions"][0]["PaymentGateway"];
                 $payment->payment_id = $response["Data"]["InvoiceTransactions"][0]["PaymentId"];
-
+                $payment->invoice_value = $response["Data"]["InvoiceTransactions"][0]["TransationValue"];
                 $payment->json = $responseData;
                 $payment->save();
                 return true;
