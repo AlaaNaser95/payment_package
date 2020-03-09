@@ -74,8 +74,6 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         } else {
             if ($response["IsSuccess"]) {
 
-                session(['invoice_id'=>$response["Data"]["InvoiceId"]]);
-
                 //create new payment entry in the database
                 $payment = new MyFatoorah();
                 $payment->invoice_id = $response["Data"]["InvoiceId"];
@@ -102,7 +100,6 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
     //tested for visa card
     public function isPaymentExecuted(){
 
-        $invoiceId=session('invoice_id');
         $paymentId=request('paymentId');
 
         $data=new \stdClass();
@@ -128,7 +125,7 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
             if($status=='Paid'){
 
                 //get payment from database
-                $payment = $this->getPayment($invoiceId);
+                $payment = $this->getPayment($response["Data"]["InvoiceId"]);
                 $payment->invoice_status = $status;
                 $payment->currency = $response["Data"]["InvoiceTransactions"][0]["Currency"];
                 $payment->payment_method = $response["Data"]["InvoiceTransactions"][0]["PaymentGateway"];
