@@ -135,10 +135,12 @@ class TapGateway extends Curl implements PaymentInterface
             //not tested yet
             //if PostURl is given in the request body
             else {
-                $hashString = getallheaders();
-                $hashString = $hashString['hashstring'];
+                //$hashString = getallheaders();
+                //$hashString = $hashString['hashstring'];
+                $hashString = $_SERVER['HTTP_HASHSTRING'];
                 $id = request('charge.id');
                 $amount = request('charge.amount');
+                $amount = number_format($amount,2);
                 $currency = request('charge.currency');
                 $gateway_reference = request('charge.reference.gateway');
                 $payment_reference = request('charge.reference.payment');
