@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAgreementsTable extends Migration
+class CreateBnAgreementsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAgreementsTable extends Migration
      */
     public function up()
     {
-        Schema::create('agreements', function (Blueprint $table) {
+        Schema::create('bn_agreements', function (Blueprint $table) {
             $table->increments('id');
             $table->string('agreement_id')->nullable(true)->index();
             $table->string('gateway');
@@ -25,7 +25,7 @@ class CreateAgreementsTable extends Migration
             $table->string('cycles_remaining');
             $table->string('next_billing_date')->nullable(true);
             $table->string('last_payment_date')->nullable(true);
-            $table->foreign('plan_id')->references('plan_id')->on('our_plans');
+            $table->foreign('plan_id')->references('plan_id')->on('bn_our_plans');
             $table->timestamps();
         });
     }
@@ -39,6 +39,6 @@ class CreateAgreementsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('agreements');
+        Schema::dropIfExists('bn_agreements');
     }
 }

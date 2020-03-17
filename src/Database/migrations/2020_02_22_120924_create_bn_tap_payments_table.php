@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTapPaymentsTable extends Migration
+class CreateBnTapPaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTapPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tap_payments', function (Blueprint $table) {
+        Schema::create('bn_tap_payments', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('charge_id');
                 $table->string('source_id');
@@ -38,6 +38,6 @@ class CreateTapPaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tap_payments');
+        Schema::dropIfExists('bn_tap_payments');
     }
 }

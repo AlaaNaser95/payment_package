@@ -4,5 +4,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tap extends Model
 {
-protected $table = 'tap_payments';
+protected $table = 'bn_tap_payments';
 }

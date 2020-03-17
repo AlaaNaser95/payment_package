@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRecurringPaymentsTable extends Migration
+class CreateBnRecurringPaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateRecurringPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('recurring_payments', function (Blueprint $table) {
+        Schema::create('bn_recurring_payments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('pay_id');
             $table->float('amount');
@@ -21,7 +21,7 @@ class CreateRecurringPaymentsTable extends Migration
             $table->string('agreement_id');
             $table->string('state');
             $table->string('payment_date');
-            $table->foreign('agreement_id')->references('agreement_id')->on('agreements');
+            $table->foreign('agreement_id')->references('agreement_id')->on('bn_agreements');
             $table->timestamps();
         });
     }
@@ -33,6 +33,6 @@ class CreateRecurringPaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recurring_payments');
+        Schema::dropIfExists('bn_recurring_payments');
     }
 }

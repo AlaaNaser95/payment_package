@@ -157,7 +157,14 @@ class TapGateway extends Curl implements PaymentInterface
                     $data='{"charge_id" : '.$id.' ,"status" : '.$status.'}';
                     try{
                         $post_url=$this->getPayment($id);
-                        return $this->notifyUser($data,$post_url);
+                        $result=$this->notifyUser($data,$post_url);
+                        $err=$result->err;
+                        if ($err) {
+                          return "cURL Error #:" . $err;
+                        }
+                       else {
+                        return "done";
+                       }
                     }catch(Exception $ex){
                         die($ex);
                     }

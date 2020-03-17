@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePaypalPaymentsTable extends Migration
+class CreateBnPaypalPaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePaypalPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('paypal_payments', function (Blueprint $table) {
+        Schema::create('bn_paypal_payments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('payment_id');
             $table->string('payer_id')->nullable(true);
@@ -36,6 +36,6 @@ class CreatePaypalPaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('paypal_payments');
+        Schema::dropIfExists('bn_paypal_payments');
     }
 }

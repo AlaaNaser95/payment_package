@@ -12,6 +12,6 @@ class FawryController extends Controller
 {
     public function fawryCheck(Request $request){
         $s= new TapGateway();
-        return $s->isPaymentExecuted()."";
+        return $s->isPaymentExecuted();
     }
 }

@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class MyFatoorah extends Model
 {
-    protected $table="myfatoorah_payments";
+    protected $table="bn_myfatoorah_payments";
 
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Agreement extends Model
 {
-    protected $table='agreements';
+    protected $table='bn_agreements';
     protected $guarded = ['id'];
 
     public function OurPlan()
