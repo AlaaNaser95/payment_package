@@ -40,7 +40,8 @@ class TapGateway extends Curl implements PaymentInterface
                 if(env('FAWRY_TESTING_MODE'))
                     $chargeParam->post = new Post(env('FAWRY_TESTING_PUBLISHED_BASE_URL').'/fawry-check');
                 else
-                    $chargeParam->post = new Post(url('/fawry-check'));
+                    //$chargeParam->post = new Post(url('/fawry-check'));
+                    $chargeParam->post= new Post($url);
 
                 //this is only for make tap return for me a payment url
                 $chargeParam->redirect = new Redirect("https://beinmedia.com");
@@ -178,7 +179,8 @@ class TapGateway extends Curl implements PaymentInterface
                 } else {
                     $returnResponse->status=false;
                 }
-                try{
+                return $returnResponse;
+                /*try{
                     $post_url=$this->getPayment($id);
                     $result=$this->notifyUser($returnResponse,$post_url);
                     $err=$result->err;
@@ -190,7 +192,7 @@ class TapGateway extends Curl implements PaymentInterface
                    }
                 }catch(Exception $ex){
                     die($ex);
-                }
+                }*/
 
             }
         }
