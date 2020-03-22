@@ -10,6 +10,7 @@ class ChargeParam
     public $source;
     public $customer;
     public $description;
+    public $metadata;
     public $post;
     public $redirect;
     public function __construct(){

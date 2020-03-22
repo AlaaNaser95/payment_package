@@ -26,6 +26,7 @@ class CreateBnTapPaymentsTable extends Migration
                 $table->string('transaction_created');
                 $table->string('transaction_url');
                 $table->string('post_url')->nullable(true);
+                $table->string('track_id')->nullable(true);
                 $table->json('json')->nullable(true);
                 $table->timestamps();
             });

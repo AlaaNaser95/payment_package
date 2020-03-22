@@ -24,6 +24,12 @@ class TapGateway extends Curl implements PaymentInterface
             $chargeParam->source=new Source($data->paymentMethodId);
             $chargeParam->currency=$data->currency;
 
+            if(($data->trackId)<>null){
+            $meta=new \stdClass();
+            $meta->track_id=$data->trackId;
+            $chargeParam->metadata=$meta;
+            }
+
             $url=$data->postURL;
 
             if($data->paymentMethodId=='src_eg.fawry'){
@@ -72,6 +78,7 @@ class TapGateway extends Curl implements PaymentInterface
                 $newCharge->status = $response['status'];
                 $newCharge->description = $response['description'];
                 $newCharge->source_id = $response['source']['id'];
+                $newCharge->track_id= $response['metadata']['track_id'];
                 $newCharge->transaction_url = $response['transaction']['url'];
                 $newCharge->transaction_created = $response['transaction']['created'];
                 if($response['source']['id']=="src_eg.fawry"){
@@ -112,6 +119,8 @@ class TapGateway extends Curl implements PaymentInterface
                 else {
 
                     $charge=$this->getPayment($chargeId);
+                    $returnResponse=new \stdClass();
+                    $returnResponse->track_id=$charge->track_id;
 
                     if($response['status']=='CAPTURED' or $response['status']=='APPROVED'){
 
@@ -120,23 +129,24 @@ class TapGateway extends Curl implements PaymentInterface
                         $charge->json=$jsonResponse;
                         $charge->payment_method=$response['source']['payment_method'];
                         $charge->save();
-
-                        return true;
+                        
+                        $returnResponse->status=true;
+                        return $returnResponse;
                     }
                     else
                         $charge->status = $response['status'];
                         $charge->json = $jsonResponse;
                         $charge->payment_method=$response['source']['payment_method'];
                         $charge->save();
-                        return false;
+
+                        $returnResponse->status=false;
+                        return $returnResponse;
                 }
             }
 
-            //not tested yet
             //if PostURl is given in the request body
             else {
-                //$hashString = getallheaders();
-                //$hashString = $hashString['hashstring'];
+
                 $hashString = $_SERVER['HTTP_HASHSTRING'];
                 $id = request('charge.id');
                 $amount = request('charge.amount');
@@ -149,30 +159,39 @@ class TapGateway extends Curl implements PaymentInterface
                 $SecretAPIKey = env('TAP_API_KEY', '');
                 $toBeHashedString = 'x_id' . $id . 'x_amount' . $amount . 'x_currency' . $currency . 'x_gateway_reference' . $gateway_reference . 'x_payment_reference' . $payment_reference . 'x_status' . $status . 'x_created' . $created . '';
                 $myHashString = hash_hmac('sha256', $toBeHashedString, $SecretAPIKey);
+                
+                $savedCharge = $this->getPayment($id);
+
+                $returnResponse= new \stdClass();
+                $returnResponse->track_id= $savedCharge->track_id;
+                $returnResponse->tap_id = $id;
+
                 if ($myHashString == $hashString) {
                     echo "Secure Post";
-                    $savedCharge = $this->getPayment($id);
+                    
                     $savedCharge->status = $status;
                     $savedCharge->save();
-                    $data='{"charge_id" : '.$id.' ,"status" : '.$status.'}';
-                    try{
-                        $post_url=$this->getPayment($id);
-                        $result=$this->notifyUser($data,$post_url);
-                        $err=$result->err;
-                        if ($err) {
-                          return "cURL Error #:" . $err;
-                        }
-                       else {
-                        return "done";
-                       }
-                    }catch(Exception $ex){
-                        die($ex);
-                    }
-                    return $status;
-                } else {
-                    return "Insecure Post";
+                    $returnResponse->status=true;
 
+                    //$data='{"charge_id" : '.$id.' ,"status" : '.$status.'}';
+                    
+                } else {
+                    $returnResponse->status=false;
                 }
+                try{
+                    $post_url=$this->getPayment($id);
+                    $result=$this->notifyUser($returnResponse,$post_url);
+                    $err=$result->err;
+                    if ($err) {
+                      return "cURL Error #:" . $err;
+                    }
+                   else {
+                    return "done";
+                   }
+                }catch(Exception $ex){
+                    die($ex);
+                }
+
             }
         }
 

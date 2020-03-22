@@ -15,4 +15,5 @@ class MyfatoorahParam
     public $CallBackUrl;//string
     public $ErrorUrl;//string
     public $CustomerReference;//string
+    public $UserDefinedField;
 }

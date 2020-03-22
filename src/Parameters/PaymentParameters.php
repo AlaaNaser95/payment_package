@@ -17,4 +17,5 @@ class PaymentParameters
     public $description;
     public $postURL;
     public $paymentMethodId;
+    public $trackId;
 }

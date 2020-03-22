@@ -81,6 +81,7 @@ $data=new PaymentParameters();
 
 $data->amount=10;  // Float Amount
 $data->currency='USD';  // ISO currency code
+$data->trackId= "track id"; //optional - user defined field
 $data->returnURL=url('/paypal-check'); // Fully qualified url where the user will be redirected after successful payment.
 $data->cancelURL='https://www.example.com'; // Fully qualified url where the user will be redirected after failed payment.
 
@@ -98,7 +99,7 @@ This method should be called in the redirect url to validate the payment.
 use PaypalPayment;
 
 public function checkPaypalPayment (Request $request){
-    if(PaypalPayment::isPaymentExecuted())
+    if(PaypalPayment::isPaymentExecuted()->status)
         return 'success';
     else
         return 'fail';
@@ -152,6 +153,7 @@ use MyFatoorahPayment;
 $data=new PaymentParameters();
 $data->PaymentMethodId=1; // Check the available methods from the table
 $data->amount=10; // Amount
+$data->trackId= "track id"; //optional - user defined field
 $data->currency="KWD"; // optional- default the same as api country currency
 $data->returnURL=url('/fatoorah-check'); // Fully qualified url where the user will be redirected after successful payment.
 $data->cancelURL="https://www.beinmedia.com/"; // Fully qualified url where the user will be redirected after failed payment.
@@ -171,7 +173,7 @@ use MyFatoorahPayment;
 
 public function checkMyFatoorahPayment(Request $request){
 
-    if(MyFatoorahPayment::isPaymentExecuted())
+    if(MyFatoorahPayment::isPaymentExecuted()->status)
         return ‘success’;
     else
         return ‘fail’;
@@ -237,6 +239,7 @@ $data->email="alaanaser95.95@gmail.com"; // Customer email
 $data->name="Alaa"; //Customer email
 $data->countryCode="965";
 $data->phoneNumber="65080631";
+$data->trackId= "track id"; //optional - user defined field
 $data->amount=10; // float amount
 $data->description="dfghjk";
 $data->paymentMethodId="src_eg.fawry";
@@ -262,7 +265,7 @@ This method should be called in the redirect url to validate the payment.
 use TapPayment;
 
 public function checkTapPayment (Request $request){
-    if( TapPayment::isPaymentExecuted())
+    if( TapPayment::isPaymentExecuted()->status)
         return ‘success’;
     else
         return ‘fail’;
@@ -402,12 +405,21 @@ use Payments;
 $all_payments = Payments::getAllPayments();
 ```
 
-## Samples for Post notification body
-* Fawry
+## Samples
+isPaymentExecuted();
+```bash
+    {
+        "status" : true,
+        "track_id": "track id"
+    }
+```
+### Post notification body
+* Fawry 
 ``` bash
     {
-        "charge_id" : "chg_Nj545620201224Zq450303159" ,
-        "status" : "CAPTURED"
+        "tap_id" : "chg_Nj545620201224Zq450303159" ,
+        "status" : true,
+        "track_id": "track id"
     }
 ```
 

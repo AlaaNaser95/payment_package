@@ -24,6 +24,7 @@ class CreateBnPaypalPaymentsTable extends Migration
             $table->string('approval_link');
             $table->string('create_time');
             $table->string('update_time')->nullable(true);
+            $table->string('track_id')->nullable(true);
             $table->json('json')->nullable();
             $table->timestamps();
         });

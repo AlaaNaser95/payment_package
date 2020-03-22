@@ -25,6 +25,7 @@ class CreateBnMyfatoorahPaymentsTable extends Migration
             $table->integer("invoice_id");
             $table->float("invoice_value")->nullable(true);
             $table->json("json")->nullable(true);
+            $table->string("track_id")->nullable(true);
             $table->timestamps();
         });
     }

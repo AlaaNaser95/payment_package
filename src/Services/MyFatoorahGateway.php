@@ -58,6 +58,9 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $data->InvoiceValue=$paymentParameters->amount;
         $data->CallBackUrl=$paymentParameters->returnURL;
         $data->ErrorUrl=$paymentParameters->cancelURL;
+        if($paymentParameters->trackId!=null){
+            $data->UserDefinedField=$paymentParameters->trackId;
+        }
         if(($paymentParameters->currency)<>null){
             $data->DisplayCurrencyIso=$paymentParameters->currency;
         }
@@ -118,25 +121,33 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
             return "cURL Error #:" . $err;
 
         } else {
-
+            $payment = $this->getPayment($response["Data"]["InvoiceId"]);
             $status=$response["Data"]["InvoiceStatus"];
+            $track_id=$response["Data"]["UserDefinedField"];
+
+            $returnResponse=new \stdClass();
+            $returnResponse->track_id= $track_id;
 
             //update payment in database if paid
             if($status=='Paid'){
 
                 //get payment from database
-                $payment = $this->getPayment($response["Data"]["InvoiceId"]);
                 $payment->invoice_status = $status;
                 $payment->currency = $response["Data"]["InvoiceTransactions"][0]["Currency"];
                 $payment->payment_method = $response["Data"]["InvoiceTransactions"][0]["PaymentGateway"];
                 $payment->payment_id = $response["Data"]["InvoiceTransactions"][0]["PaymentId"];
                 $payment->invoice_value = $response["Data"]["InvoiceTransactions"][0]["TransationValue"];
                 $payment->json = $responseData;
+                $payment->track_id = $track_id;
                 $payment->save();
-                return true;
+
+                $returnResponse->status=true;
+                return $returnResponse;
             }
 
-            return false;
+            $returnResponse->status= false;
+            return $returnResponse;
+
         }
 
     }

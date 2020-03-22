@@ -63,8 +63,9 @@ class PaypalGateway implements PaymentInterface
             $paypalPayment->currency=$currency;
             $paypalPayment->create_time=$payment->getCreateTime();
             $paypalPayment->approval_link=$payment->getApprovalLink();
+            $paypalPayment->track_id=$data->trackId;
             $paypalPayment->save();
-
+            
             return $approvalURL;
         }
         catch ( PayPalConnectionException $ex) {
@@ -79,7 +80,6 @@ class PaypalGateway implements PaymentInterface
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function isPaymentExecuted(){
-
         $paymentId=request('paymentId');
 
         //retrieve payment from database
@@ -97,6 +97,9 @@ class PaypalGateway implements PaymentInterface
         $execution = new PaymentExecution();
         $execution->setPayerId($payerId);
 
+        $returnResponse = new \stdClass();
+        $returnResponse->track_id=$internalPayment->track_id;
+        
         try {
             // Execute payment
             $result = $payment->execute($execution, $this->apiContext);
@@ -105,10 +108,11 @@ class PaypalGateway implements PaymentInterface
             $internalPayment->json=$result;
             $internalPayment->save();
 
-            if ($result->getState() == 'approved') {
-                return true;
-                }
-            return false;
+            if ($result->getState() == 'approved') 
+                $returnResponse->status=true;
+            else
+                $returnResponse->status=false;
+            return $returnResponse;
         } catch (PayPal\Exception\PayPalConnectionException $ex) {
             echo $ex->getCode();
             echo $ex->getData();
