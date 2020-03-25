@@ -54,7 +54,7 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
 
         //create object to be converted to request body
         $data=new MyfatoorahParam();
-        $data->PaymentMethodId=$paymentParameters->PaymentMethodId;
+        $data->PaymentMethodId=$paymentParameters->paymentMethodId;
         $data->InvoiceValue=$paymentParameters->amount;
         $data->CallBackUrl=$paymentParameters->returnURL;
         $data->ErrorUrl=$paymentParameters->cancelURL;
