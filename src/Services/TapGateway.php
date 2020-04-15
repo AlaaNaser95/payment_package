@@ -59,7 +59,7 @@ class TapGateway extends Curl implements PaymentInterface
             $data = json_encode($chargeParam);
 
             //use curl method to generate post request
-            $result=$this->postCurl("https://api.tap.company/v2/charges",$data,env('TAP_API_KEY'));
+            $result=$this->postCurl("https://api.tap.company/v2/charges",$data,env('BN_TAP_API_KEY'));
             $err=$result->err;
 
             $response=$result->response;
@@ -109,7 +109,7 @@ class TapGateway extends Curl implements PaymentInterface
 
                 //retrieve charge
                 //result gives error
-                $result=$this->getCurl("https://api.tap.company/v2/charges/$chargeId",env('TAP_API_KEY'));
+                $result=$this->getCurl("https://api.tap.company/v2/charges/$chargeId",env('BN_TAP_API_KEY'));
                 $jsonResponse=$result->response;
                 $err=$result->err;
                 $response = json_decode($jsonResponse, true);
