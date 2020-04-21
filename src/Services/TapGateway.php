@@ -19,7 +19,7 @@ class TapGateway extends Curl implements PaymentInterface
             $chargeParam->customer->phone=new Phone($data->countryCode,$data->phoneNumber);
             $chargeParam->customer->email=$data->email;
             $chargeParam->customer->first_name=$data->name;
-            //$chargeParam->description=$data->description;
+            $chargeParam->description=$data->description;
             $chargeParam->amount=$data->amount;
             $chargeParam->source=new Source($data->paymentMethodId);
             $chargeParam->currency=$data->currency;
@@ -77,7 +77,7 @@ class TapGateway extends Curl implements PaymentInterface
                 $newCharge->amount = $response['amount'];
                 $newCharge->currency = $response['currency'];
                 $newCharge->status = $response['status'];
-                $newCharge->description = $response['description'];
+                //$newCharge->description = $response['description'];
                 $newCharge->source_id = $response['source']['id'];
                 $newCharge->track_id= $response['metadata']['track_id'];
                 $newCharge->transaction_url = $response['transaction']['url'];
