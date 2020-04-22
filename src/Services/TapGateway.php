@@ -90,7 +90,7 @@ class TapGateway extends Curl implements PaymentInterface
                 $newCharge->save();
 
                 //return payment url
-                return $response['transaction']['url'];
+                return (is_null($newCharge->order_reference)? $response['transaction']['url']:$response['transaction']['order']['reference']);
             }
         }
 

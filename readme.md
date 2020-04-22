@@ -220,9 +220,13 @@ Fawry has different structure, the payment is validated asynchronously.
 You need to set postURL where you will get notified once the payment is completed. No need to set redirectURL.
 Once the payment is executed, the post url provided will be requested by Tap, You need to call *isPayementExecuted()* method to validate payment and check the payment status.
 
+
 **Methods**
 
 * *generatePaymentURL($paymentParameters)*
+
+This Method reurns the url where the user should be redirected to proceed the payment. 
+Fo fawry, this method return the order number not the payment URL, user will pay using this number in any fawry center.
 
 ``` bash
 <?php
