@@ -151,7 +151,7 @@ use MyFatoorahPayment;
 
 // Create the paymentParameters object
 $data=new PaymentParameters();
-$data->PaymentMethodId=1; // Check the available methods from the table
+$data->paymentMethodId=1; // Check the available methods from the table
 $data->amount=10; // Amount
 $data->trackId= "track id"; //optional - user defined field
 $data->currency="KWD"; // optional- default the same as api country currency
@@ -217,8 +217,8 @@ FAWRY_TESTING_PUBLISHED_BASE_URL=https://789fbf71.ngrok.io
 **Fawry Gateway**
 
 Fawry has different structure, the payment is validated asynchronously.
-You need to set postURL where you will get notified once the payment is completed.
-No need to set redirectURL.
+You need to set postURL where you will get notified once the payment is completed. No need to set redirectURL.
+Once the payment is executed, the post url provided will be requested by Tap, You need to call *isPayementExecuted()* method to validate payment and check the payment status.
 
 **Methods**
 
@@ -409,16 +409,16 @@ $all_payments = Payments::getAllPayments();
 isPaymentExecuted();
 ```bash
     {
-        "status" : true,
+        "status" : true, //true => payment approved, false => payment declined
         "track_id": "track id"
     }
 ```
-### Post notification body
-* Fawry 
+### Fawry 
+isPaymentExecuted();
 ``` bash
     {
         "tap_id" : "chg_Nj545620201224Zq450303159" ,
-        "status" : true,
+        "status" : true, //true => payment approved, false => payment declined
         "track_id": "track id"
     }
 ```
