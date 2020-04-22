@@ -149,14 +149,14 @@ class TapGateway extends Curl implements PaymentInterface
             else {
 
                 $hashString = $_SERVER['HTTP_HASHSTRING'];
-                $id = request('charge.id');
-                $amount = request('charge.amount');
+                $id = request('id');
+                $amount = request('amount');
                 $amount = number_format($amount,2);
-                $currency = request('charge.currency');
-                $gateway_reference = request('charge.reference.gateway');
-                $payment_reference = request('charge.reference.payment');
-                $status = request('charge.status');
-                $created = request('charge.transaction.created');
+                $currency = request('currency');
+                $gateway_reference = request('reference.gateway');
+                $payment_reference = request('reference.payment');
+                $status = request('status');
+                $created = request('transaction.created');
                 $SecretAPIKey = env('TAP_API_KEY', '');
                 $toBeHashedString = 'x_id' . $id . 'x_amount' . $amount . 'x_currency' . $currency . 'x_gateway_reference' . $gateway_reference . 'x_payment_reference' . $payment_reference . 'x_status' . $status . 'x_created' . $created . '';
                 $myHashString = hash_hmac('sha256', $toBeHashedString, $SecretAPIKey);
@@ -172,27 +172,17 @@ class TapGateway extends Curl implements PaymentInterface
                     
                     $savedCharge->status = $status;
                     $savedCharge->save();
-                    $returnResponse->status=true;
-
+                    if ($savedCharge->status == "CAPTURED")
+                        $returnResponse->status=true;
+                    else
+                        $returnResponse->status=false;
                     //$data='{"charge_id" : '.$id.' ,"status" : '.$status.'}';
-                    
+
                 } else {
                     $returnResponse->status=false;
                 }
                 return $returnResponse;
-                /*try{
-                    $post_url=$this->getPayment($id);
-                    $result=$this->notifyUser($returnResponse,$post_url);
-                    $err=$result->err;
-                    if ($err) {
-                      return "cURL Error #:" . $err;
-                    }
-                   else {
-                    return "done";
-                   }
-                }catch(Exception $ex){
-                    die($ex);
-                }*/
+                
 
             }
         }
