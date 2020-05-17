@@ -64,6 +64,12 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         if(($paymentParameters->currency)<>null){
             $data->DisplayCurrencyIso=$paymentParameters->currency;
         }
+        if(($paymentParameters->name)<>null){
+            $data->CustomerName=$paymentParameters->name;
+        }
+        if(($paymentParameters->email)<>null){
+            $data->CustomerEmail=$paymentParameters->email;
+        }
         $data=json_encode($data);
 
 
@@ -84,6 +90,8 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
                 $payment->customer_reference = $response["Data"]["CustomerReference"];
                 $data=json_decode($data);
                 $payment->payment_method_id = $data->PaymentMethodId;
+                $payment->customer_name= $data->CustomerName?:null;
+                $payment->customer_email= $data->CustomerEmail?:null;
 
                 $payment->save();
 

@@ -16,4 +16,6 @@ class MyfatoorahParam
     public $ErrorUrl;//string
     public $CustomerReference;//string
     public $UserDefinedField;
+    public $CustomerName;//string
+
 }
