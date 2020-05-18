@@ -59,7 +59,7 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $data->CallBackUrl=$paymentParameters->returnURL;
         $data->ErrorUrl=$paymentParameters->cancelURL;
         if($paymentParameters->trackId!=null){
-            $data->UserDefinedField=$paymentParameters->trackId;
+            $data->CustomerReference=$paymentParameters->trackId;
         }
         if(($paymentParameters->currency)<>null){
             $data->DisplayCurrencyIso=$paymentParameters->currency;
@@ -131,7 +131,7 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         } else {
             $payment = $this->getPayment($response["Data"]["InvoiceId"]);
             $status=$response["Data"]["InvoiceStatus"];
-            $track_id=$response["Data"]["UserDefinedField"];
+            $track_id=$response["Data"]["CustomerReference"];
 
             $returnResponse=new \stdClass();
             $returnResponse->track_id= $track_id;
@@ -146,7 +146,6 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
                 $payment->payment_id = $response["Data"]["InvoiceTransactions"][0]["PaymentId"];
                 $payment->invoice_value = $response["Data"]["InvoiceTransactions"][0]["TransationValue"];
                 $payment->json = $responseData;
-                $payment->track_id = $track_id;
                 $payment->save();
 
                 $returnResponse->status=true;

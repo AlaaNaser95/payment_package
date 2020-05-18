@@ -155,6 +155,8 @@ $data->paymentMethodId=1; // Check the available methods from the table
 $data->amount=10; // Amount
 $data->trackId= "track id"; //optional - user defined field
 $data->currency="KWD"; // optional- default the same as api country currency
+$data->name="Alaa"; // optional- Customer name
+$data->email="alaa@test.com"; // optional- Customer email
 $data->returnURL=url('/fatoorah-check'); // Fully qualified url where the user will be redirected after successful payment.
 $data->cancelURL="https://www.beinmedia.com/"; // Fully qualified url where the user will be redirected after failed payment.
 
