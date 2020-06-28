@@ -109,13 +109,12 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
     //tested for knet gateway
     //not working mastercard
     //tested for visa card
-    public function isPaymentExecuted(){
-
-        $paymentId=request('paymentId');
+    public function isPaymentExecuted($paymentId=null){
 
         $data=new \stdClass();
+        $data->KeyType=is_null($paymentId)?"PaymentId":"InvoiceId";
+        $paymentId=$paymentId ?? request('paymentId');
         $data->Key="$paymentId";
-        $data->KeyType="PaymentId";
         $data = json_encode($data);
 
         $result=$this->postCurl(($this->baseURL."/GetPaymentStatus"),$data,env('MYFATOORAH_API_KEY'));

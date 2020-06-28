@@ -106,6 +106,19 @@ public function checkPaypalPayment (Request $request){
 }
 ```
 
+* *isPayementExecuted($paymentId)*
+This method validate the payment on specific payment_id. 
+
+``` bash
+<?php
+
+if(PaypalPayment::isPaymentExecuted("PAYID-L2OH7LA6TM617940X333145E")->status)
+    return 'success';
+else
+    return 'fail';
+
+```
+
 * *getPayment($payment_id)*
 This method returns the related paypal payment details according to the given payment_id.
 ``` bash
@@ -114,6 +127,8 @@ use PaypalPayment;
 $paypal_payment = PaypalPayment::getPayment($payment_id);
 ```
 ---
+
+
 
 ### MyFatoorah payment Gateway
 > **Configuration**
@@ -182,6 +197,24 @@ public function checkMyFatoorahPayment(Request $request){
 
 }
 ```
+
+* *isPayementExecuted($invoiceId)*
+
+This method validates the payment on specific invoice_id. 
+
+``` bash
+<?php
+
+use MyFatoorahPayment;
+
+if(MyFatoorahPayment::isPaymentExecuted(5513941)->status)
+    return ‘success’;
+else
+    return ‘fail’;
+
+```
+
+
 * *getPayment($invoice_id)*
 
 This method returns the related MyFatoorah payment details according to the given incoice id.

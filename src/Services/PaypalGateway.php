@@ -79,33 +79,42 @@ class PaypalGateway implements PaymentInterface
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public function isPaymentExecuted(){
-        $paymentId=request('paymentId');
+    public function isPaymentExecuted($paymentId=null){
+
+        $checkPayment=is_null($paymentId);
+        $paymentId=$paymentId ?? request('paymentId');
 
         //retrieve payment from database
         $internalPayment=$this->getPayment($paymentId);
-        $payerId = request('PayerID');
 
         //retrieve payment from paypal
         $payment = Payment::get($paymentId, $this->apiContext);
 
-        //add payer id to database
-        $internalPayment->payer_id=$payerId;
-        $internalPayment->save();
+        if($checkPayment){
+            //add payer id to database
+            $payerId = request('PayerID');
+            $internalPayment->payer_id=$payerId;
+            $internalPayment->save();
 
-        // Execute payment with payer ID
-        $execution = new PaymentExecution();
-        $execution->setPayerId($payerId);
+            // Execute payment with payer ID
+            $execution = new PaymentExecution();
+            $execution->setPayerId($payerId);
+        }
 
         $returnResponse = new \stdClass();
         $returnResponse->track_id=$internalPayment->track_id;
         
         try {
-            // Execute payment
-            $result = $payment->execute($execution, $this->apiContext);
+            if($checkPayment){
+                // Execute payment
+                $result = $payment->execute($execution, $this->apiContext);
+                $internalPayment->json=$result;
+            }
+            else{
+                $result=$payment;
+            }
             $internalPayment->state=$result->getState();
             $internalPayment->update_time=$result->getUpdateTime();
-            $internalPayment->json=$result;
             $internalPayment->save();
 
             if ($result->getState() == 'approved') 
