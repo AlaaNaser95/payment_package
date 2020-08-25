@@ -6,9 +6,12 @@
 
 laravel package, that implements MyFatoorah, Tap , PayPal payment gatways and paypal recurring billing.
 
+## Features
+* Laravel 5.7.* | 6.x | 7.x are supported.
+
 ## Requirements
 * laravel/framework 5.7.*
-* PHP 7.1.3
+* PHP 7.2.5
 
 ## Installation
 
