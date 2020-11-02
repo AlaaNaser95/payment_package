@@ -6,10 +6,10 @@ namespace beinmedia\payment\Services;
 
 class Curl
 {
-    public function postCurl(String $url,String $data,String $api_Key){
+    public function postCurl(String $url,String $data,String $api_Key, $formData = false){
 
         $curl = curl_init();
-
+        $contentType = $formData ? 'multipart/form-data': 'application/json';
         curl_setopt_array($curl, array(
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
@@ -21,7 +21,7 @@ class Curl
             CURLOPT_POSTFIELDS => $data,
             CURLOPT_HTTPHEADER => array(
                 "authorization: Bearer $api_Key",
-                "content-type: application/json"
+                "content-type: $contentType"
             ),
         ));
 
