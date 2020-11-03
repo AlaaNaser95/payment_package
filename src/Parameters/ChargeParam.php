@@ -13,6 +13,7 @@ class ChargeParam
     public $metadata;
     public $post;
     public $redirect;
+    public $save_card;
     public function __construct(){
     }
 
