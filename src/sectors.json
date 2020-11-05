@@ -1,0 +1,1760 @@
+[
+    {
+        "sector_id": "sector_4iF2veqGgvhrW75",
+        "name_ar": "الطباعة ثلاثية الأبعاد",
+        "name_en": "3D Printing",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_xzW0i1U7fxJWrGI",
+        "name_ar": "اكسسوارات",
+        "name_en": "Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Vi2Dy828EgUeDVJ",
+        "name_ar": "اكسسوارات رجالي",
+        "name_en": "Accessories - Men",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_U40IukDERIfxHli",
+        "name_ar": "محاسبة",
+        "name_en": "Accounting",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_pe8R2WoIr3v7YjZ",
+        "name_ar": "التسويق الإعلاني",
+        "name_en": "Advertising / Marketing",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_aOes9dFp8OeG7FY",
+        "name_ar": "الإعلان - عبر الانترنت",
+        "name_en": "Advertising / Marketing - Online",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_4aipBzFTVm3KALa",
+        "name_ar": "مكيفات / التدفئة",
+        "name_en": "Air Conditioning",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_zgUsqOnf5GFTgeU",
+        "name_ar": "",
+        "name_en": "Appliances - Restaurants",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_V8J48ihStBDnzHT",
+        "name_ar": "تصوير فوتوغرافي/تصوير أفلام",
+        "name_en": "Art/Photo/Film",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_kGkRnF3mBx88MdA",
+        "name_ar": "الفنون / الحرف اليدوية / التصميم",
+        "name_en": "Arts / Crafts / Design",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_ZQrJW8K3kh9LL77",
+        "name_ar": "",
+        "name_en": "Auto - Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_QSYmat0X0dry6x2",
+        "name_ar": "السيارات - تنظيف / التفاصيل / الحماية",
+        "name_en": "Auto - Cleaning / Detailing / Protection",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_U2YOOc9D9mhIXSs",
+        "name_ar": "",
+        "name_en": "Auto - Dealership",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_s4LxLsBrhu8rXkA",
+        "name_ar": "",
+        "name_en": "Auto - Maintenance / Repair",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_IG1UYkLI5dunpXC",
+        "name_ar": "تأجير السيارات",
+        "name_en": "Auto - Rent",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_M7OtRPMeb4AphG8",
+        "name_ar": "خدمات السيارات",
+        "name_en": "Auto Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_e03FUr5R0mjnMxi",
+        "name_ar": "",
+        "name_en": "Automobile",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_s0uXVy4mp9Zjmpg",
+        "name_ar": "",
+        "name_en": "Bank",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_GP4f0FZqo98M40n",
+        "name_ar": "خرز",
+        "name_en": "Beads",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_SKlea4ijviZ76Xb",
+        "name_ar": "تجميل",
+        "name_en": "Beauty",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Abs1skZFy0bZuHg",
+        "name_ar": "العناية بالجسم",
+        "name_en": "Body Care",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_97zLFEplKQJyy5q",
+        "name_ar": "مكتبة",
+        "name_en": "Bookstore",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_r2sptZxj7uVD4cx",
+        "name_ar": "مواد بناء",
+        "name_en": "Building Materials",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_2UMmC3W2R40kP6V",
+        "name_ar": "",
+        "name_en": "Business Listing",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_OUFCtm40Ga6QR4A",
+        "name_ar": "التخييم - تأجير",
+        "name_en": "Camping - Rent",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_KN2ALGVvTORjyLc",
+        "name_ar": "التخييم - الاطفال / المراهقين",
+        "name_en": "Camps - Kids / Teenagers",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_L7XLp4oI9RJUlne",
+        "name_ar": "",
+        "name_en": "Carpentry",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_o5hjNkPksavAz8l",
+        "name_ar": "",
+        "name_en": "Carpets - Religious",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Cc7Nk8rGgDjulGa",
+        "name_ar": "الاعمال الخيرية",
+        "name_en": "Charity",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_dTrBM7YHGmPchse",
+        "name_ar": "",
+        "name_en": "Cleaning - Laundry",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_l2TivfxSGarzZ1A",
+        "name_ar": "خدمات تنظيف",
+        "name_en": "Cleaning - Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_dVzOWexMI3hOZmH",
+        "name_ar": "",
+        "name_en": "Cleaning - Supplies",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_VJdJpmHmGMBUZZS",
+        "name_ar": "خدمات كمبيوتر",
+        "name_en": "Computer Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_pOsADy1KltU9l7f",
+        "name_ar": "استشارات",
+        "name_en": "Consultant",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_y3KiUxlelYtJXA0",
+        "name_ar": "",
+        "name_en": "Contractor",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_DKNLtuOOScZ6GZ1",
+        "name_ar": "Coop-Society",
+        "name_en": "Coop-Society",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_QyBpeFryWvZrBrL",
+        "name_ar": "خدمات التوصيل",
+        "name_en": "Delivery / Courier",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_3kLniYEn9oN9VD4",
+        "name_ar": "طب أسنان",
+        "name_en": "Dental Care",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_STHWx1OaOCBEdx8",
+        "name_ar": "",
+        "name_en": "Dental Care - Products",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_ioq6SNKo2DVmfOa",
+        "name_ar": "الهندسة المعمارية / التصميم الداخلي",
+        "name_en": "Design - Architecture / Interior",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_ZZHfGkMxEsmZ8e4",
+        "name_ar": "الغوص / الرياضات المائية",
+        "name_en": "Diving / Water Sports",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_pqmazrzJ3c1HHpm",
+        "name_ar": "تعليم",
+        "name_en": "Education",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_HFNuxyzuO9Iesvd",
+        "name_ar": "",
+        "name_en": "Education - Books / Tutorials",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_BH3cLVsDBoeYg2k",
+        "name_ar": "",
+        "name_en": "Education - Nurseries",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_tBmxDeu0Dl4h1ai",
+        "name_ar": "",
+        "name_en": "Education - Tutoring",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_MlBhJNkZiImqz2U",
+        "name_ar": "الكترونيات",
+        "name_en": "Electronics",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_UAKIrXtaJgAmT66",
+        "name_ar": "",
+        "name_en": "Entertainment",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_l8KGFgYImssPs6U",
+        "name_ar": "",
+        "name_en": "Entertainment - Cinema",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_2ORBIVX3luPhOs8",
+        "name_ar": "",
+        "name_en": "Entertainment - Concerts",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_RKGyzlaDxtPyTtz",
+        "name_ar": "",
+        "name_en": "Entertainment - Culture",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_OnTo2YAmOZfXiaO",
+        "name_ar": "",
+        "name_en": "Entertainment - Kids",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_TsK2Kez6WFJDAjL",
+        "name_ar": "",
+        "name_en": "Entertainment - Theatre",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_7yRgTp2TYLDGodv",
+        "name_ar": "الفروسية",
+        "name_en": "Equestrianism",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_eUuuVuOJAT6R583",
+        "name_ar": "",
+        "name_en": "Event Planning",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_DhVTk83dTuNmQey",
+        "name_ar": "تنظيم الحفلات / زهور / هدايا",
+        "name_en": "Event Planning / Flowers / Gifts",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_FE8giHIK8Fx6547",
+        "name_ar": "الأحداث - الرياضة",
+        "name_en": "Events - Sports",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_K3kR3jraD4pClbP",
+        "name_ar": "المعارض",
+        "name_en": "Exhibition / Expo",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_3Mk5430Na4p40B1",
+        "name_ar": "",
+        "name_en": "Exhibition / Expo - Life Coaching",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Um5SKmLAV2dQyGQ",
+        "name_ar": "السوق",
+        "name_en": "Exhibition / Expo - Micro Markets",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_mAYm8WhOOqQtH15",
+        "name_ar": "",
+        "name_en": "Exhibition / Expo - Sports",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_tfrRoFgScJJqEXd",
+        "name_ar": "",
+        "name_en": "Fashion",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_SSUuM1gXRo8YM2h",
+        "name_ar": "الأزياء - اكسسوارات",
+        "name_en": "Fashion - Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_A0Hb7A8Yrq7j9xt",
+        "name_ar": "",
+        "name_en": "Fashion - Baths",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_toAvBjRa7tAKBBP",
+        "name_ar": "",
+        "name_en": "Fashion - Caps",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_c8SY9jPigC40UcQ",
+        "name_ar": "الأزياء - الملابس",
+        "name_en": "Fashion - Clothing",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_dAAe2gbvbSZQia7",
+        "name_ar": "",
+        "name_en": "Fashion - Department Store",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_F5HgvERyuIiLBH9",
+        "name_ar": "الأزياء - الراقية",
+        "name_en": "Fashion - Haute Couture",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_ixMYaEfGTMtzvVi",
+        "name_ar": "الأزياء - الاطفال",
+        "name_en": "Fashion - Infants / Kids",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_MTlGpG9THKzIak2",
+        "name_ar": "",
+        "name_en": "Fashion - Lingerie",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_JXJyL1L3dL1SHh1",
+        "name_ar": "",
+        "name_en": "Fashion - Marketplace",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_W0fPrTJgsiVC31F",
+        "name_ar": "",
+        "name_en": "Fashion - Men",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_uDUZeV8HIoi6PzM",
+        "name_ar": "",
+        "name_en": "Fashion - Men / Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_9ezAIUuhWafVoFC",
+        "name_ar": "",
+        "name_en": "Fashion - Men / Shoes / Footwear",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_VRDgTtNzHjBqUQX",
+        "name_ar": "",
+        "name_en": "Fashion - Men / Traditional",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_2tXpdO138h3hM3I",
+        "name_ar": "",
+        "name_en": "Fashion - Nitting",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_D2y4iPMvrHIjO8p",
+        "name_ar": "",
+        "name_en": "Fashion - Shoes / Footwear",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_dChHelFXbYEVH3t",
+        "name_ar": "",
+        "name_en": "Fashion - Sleepwear",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_aQWPVKGSFIuILoA",
+        "name_ar": "الأزياء - الرياضة",
+        "name_en": "Fashion - Sports",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_xm6p8RhXNQ9CXTt",
+        "name_ar": "الأزياء - ملابس السباحة",
+        "name_en": "Fashion - Swimwear",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_rMsOAdLW8EAZP1V",
+        "name_ar": "",
+        "name_en": "Fashion - Underwear",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_V3MSUdYFIZHUBvA",
+        "name_ar": "الأزياء - الزي الرسمي",
+        "name_en": "Fashion - Uniforms",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_NrlfaL9eeJ2dsHy",
+        "name_ar": "الأزياء - عرس",
+        "name_en": "Fashion - Wedding",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_jctDfiSqjY3Z3tl",
+        "name_ar": "",
+        "name_en": "Fashion - Women",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_z3CJ23sh9dZ7RXF",
+        "name_ar": "الأزياء - أحذية",
+        "name_en": "Fashion - Women / Bags / Shoes / Footwear",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_XS94ORc9hld7JuB",
+        "name_ar": "الأزياء - التقليدية",
+        "name_en": "Fashion - Women / Traditional",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_jI7tzESpvPClAXD",
+        "name_ar": "ازياء",
+        "name_en": "Fashion/Apparel",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_esbhroS4pgeT4ce",
+        "name_ar": "فيلم / تصوير",
+        "name_en": "Film / Photography",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_A5dd3t2WuIJAQJX",
+        "name_ar": "خدمات التمويل",
+        "name_en": "Financial Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_tllZ2PKHhHjhsxB",
+        "name_ar": "تحويل العملات",
+        "name_en": "Financial Services - Currency Exchange",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_1zq98BseSc2rkpu",
+        "name_ar": "التأمين",
+        "name_en": "Financial Services - Insurance",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_omDWKhkMblOE9hA",
+        "name_ar": "",
+        "name_en": "Fire Arms - Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_rjMRuQgXkNYFyJd",
+        "name_ar": "صيد السمك",
+        "name_en": "Fishing",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_cXQlYmoFBx0loXt",
+        "name_ar": "مستشار اللياقة البدنية / التغذية",
+        "name_en": "Fitness / Nutrition Consultant",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Fm4Rrly6KhxKVbZ",
+        "name_ar": "",
+        "name_en": "Flammables",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_RSmOCbKUDntJVa0",
+        "name_ar": "",
+        "name_en": "Flowers",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_G4lvCVdCgy09248",
+        "name_ar": "الأطعمة",
+        "name_en": "Food",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_v7cNAGhl0KWpHBE",
+        "name_ar": "",
+        "name_en": "Food - Accesories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_VN4Igt0d8SSDFDt",
+        "name_ar": "",
+        "name_en": "Food - American",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_9WJKnXPlyoVVfG2",
+        "name_ar": "",
+        "name_en": "Food - Bakery / Pastries",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_DDIdXFWCKP1OaRb",
+        "name_ar": "",
+        "name_en": "Food - Bites",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_AUgo2oBGI2J76jm",
+        "name_ar": "",
+        "name_en": "Food - Burgers / Fillets / Sandwiches",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_eIoJipr1rDRGPmJ",
+        "name_ar": "أغذية - خدمات تقديم الطعام",
+        "name_en": "Food - Catering",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_uW4K8KHZhBXSlE8",
+        "name_ar": "",
+        "name_en": "Food - Catering Marketplace",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_2E53K9ZzOuBb8oY",
+        "name_ar": "",
+        "name_en": "Food - Cheesery",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_3ke513ECnV319U7",
+        "name_ar": "",
+        "name_en": "Food - Chicken Fillet / Sandwiches",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_k9YVOb6mOmCzjOb",
+        "name_ar": "",
+        "name_en": "Food - Chinese",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_g4fLmKk3cfykFrM",
+        "name_ar": "الأطعمة - القهة / الشاي",
+        "name_en": "Food - Coffee / Tea",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_2ZluLNVg7rPKbyn",
+        "name_ar": "",
+        "name_en": "Food - Coffee / Tea Roasters and Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_4XES3H8kXPQZeBD",
+        "name_ar": "",
+        "name_en": "Food - Confectionary / Middle Eastern",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_nzfNRFJX5FCoRCd",
+        "name_ar": "الغذاء - الحلويات",
+        "name_en": "Food - Confectionery",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_aiT2lyYY8Uop145",
+        "name_ar": "الأطعمة - الوجبات الغذائية",
+        "name_en": "Food - Diet",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_aGoToDi0kYGGCZh",
+        "name_ar": "",
+        "name_en": "Food - Egyptian",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_6FptnnBZn4kYrXh",
+        "name_ar": "الأطعمة - الوجبات السريعة",
+        "name_en": "Food - Fast Food",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_AtDImHS13VIcNjN",
+        "name_ar": "",
+        "name_en": "Food - Fusion",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_GjOYnGujTHKL4q7",
+        "name_ar": "",
+        "name_en": "Food - Fusion / American",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_hATcQU6kDP8TzYg",
+        "name_ar": "",
+        "name_en": "Food - Fusion / Asian",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_p2SfypGGnBsAm0h",
+        "name_ar": "",
+        "name_en": "Food - Fusion / Khaleeji",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_SPzpY2G923CZpLc",
+        "name_ar": "",
+        "name_en": "Food - Fusion / Middle Eastern",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_53Vkpc6ORaGYJek",
+        "name_ar": "",
+        "name_en": "Food - Gyro / Doner / Shawarma",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Tf1ZqAfMBzohhRS",
+        "name_ar": "الأطعمة - صحية",
+        "name_en": "Food - Healthy",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_2XpLxYfXml0XbL5",
+        "name_ar": "",
+        "name_en": "Food - Ice Cream",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_pHCgqy9ZEzQysFn",
+        "name_ar": "",
+        "name_en": "Food - Indian",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_lanHYJuPr7OPBnM",
+        "name_ar": "الأطعمة - الاطفال",
+        "name_en": "Food - Infants",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_VUGSFOB46HPhCN4",
+        "name_ar": "",
+        "name_en": "Food - Italian",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_T4YxaK1RJ3ttX39",
+        "name_ar": "",
+        "name_en": "Food - Japanese",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Xx9Ynk4M3TClFmF",
+        "name_ar": "",
+        "name_en": "Food - Juices / Dairy / Smoothies",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Gn18kJeTub8QALm",
+        "name_ar": "",
+        "name_en": "Food - Khaleeji",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_ngm0eRRAM0UEVL7",
+        "name_ar": "",
+        "name_en": "Food - Marketplace",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_J5Y72GIxZRQm0Ly",
+        "name_ar": "",
+        "name_en": "Food - Mediterranean",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_lFPJyC2PUf7JCSo",
+        "name_ar": "",
+        "name_en": "Food - Mexican",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_K65dEzBR6bGKOEJ",
+        "name_ar": "",
+        "name_en": "Food - Middle Eastern",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_UJzX3ub23OsCtgW",
+        "name_ar": "",
+        "name_en": "Food - Organic",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_55cRl01q6ZaiZ2H",
+        "name_ar": "",
+        "name_en": "Food - Packaged",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_PeEdZsP7kQSIAcn",
+        "name_ar": "",
+        "name_en": "Food - Packaged Confectionery",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_L0Rnyvt69qSMVVP",
+        "name_ar": "",
+        "name_en": "Food - Packaged Snacks",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_uQMVvl9lI6obAYB",
+        "name_ar": "",
+        "name_en": "Food - Pets",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_NA3yucdJo8vnNZe",
+        "name_ar": "",
+        "name_en": "Food - Pizza",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_PlLfXpgokSVNeBi",
+        "name_ar": "",
+        "name_en": "Food - Premium Junk",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_iDvBzdu1AJhoRyZ",
+        "name_ar": "",
+        "name_en": "Food - Rice / Wheat / Flour",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_bH9jICgFhDPJzlD",
+        "name_ar": "",
+        "name_en": "Food - Seafood",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_PiPgnpuYHv4FZhg",
+        "name_ar": "الأطعمة - التوابل",
+        "name_en": "Food - Spices",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_0VQW8CqreVcpfEU",
+        "name_ar": "",
+        "name_en": "Food - Steaks",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_WW45fvTu6zogn4S",
+        "name_ar": "الأطعمة - المكملات الغذائية",
+        "name_en": "Food - Supplements",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_VEcADWi5hyi0OOe",
+        "name_ar": "",
+        "name_en": "Food - Turkish",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_lal4hPsXYX8hRMl",
+        "name_ar": "الأغذية والمشروبات",
+        "name_en": "Food and Beverage",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_zM4it7WIMxeIqA8",
+        "name_ar": "",
+        "name_en": "Gadgets",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_ddAmEvXaml03RyY",
+        "name_ar": "الأدوات - الاكسسوارات",
+        "name_en": "Gadgets - Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Ju3b2RUuNfM7uF4",
+        "name_ar": "",
+        "name_en": "Gadgets - Maintenance",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_xQqKtsfZT2P96P5",
+        "name_ar": "الألعاب",
+        "name_en": "Games / Toys",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_2ipmJP2k4ERExPi",
+        "name_ar": "",
+        "name_en": "Gaming - Virtual",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_g7zQMIgObTnP2y5",
+        "name_ar": "",
+        "name_en": "Gaming - Virtual Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_ejLbBLTlICVDIzi",
+        "name_ar": "هدايا",
+        "name_en": "Gifts",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_j4WmKeF74NymF1Y",
+        "name_ar": "بقالة",
+        "name_en": "Grocery",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_L7gyHjqkrlUZ5eu",
+        "name_ar": "الأسماك / اللحوم / الدواجن",
+        "name_en": "Grocery - Fish / Meat / Poultry",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_OLZFn0eigPWHipu",
+        "name_ar": "الفواكه والخضروات",
+        "name_en": "Grocery - Fruits / Vegetables",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Akj4lXskKx5AH6O",
+        "name_ar": "",
+        "name_en": "Grocery - Oils",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_IEmxe6x8c2yTtWi",
+        "name_ar": "",
+        "name_en": "Grocery - Sauce / Paste",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_k0aoR2f1hVvCruF",
+        "name_ar": "",
+        "name_en": "Grocery - Soft Drinks",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_2PO1t23hJnQCoMc",
+        "name_ar": "",
+        "name_en": "Grocery - Water",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_pulpcs85QLeSH3M",
+        "name_ar": "",
+        "name_en": "Gum",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_VpLW406yNc9RIqf",
+        "name_ar": "",
+        "name_en": "Hardware - Electric Boards",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_6vbvFagh40tsLF6",
+        "name_ar": "صحة",
+        "name_en": "Health",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_6x8qJbhUtBjayWm",
+        "name_ar": "الرعاية الصحية",
+        "name_en": "Healthcare",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_7HqPmlsUTWlhnno",
+        "name_ar": "الملحقات الصحية",
+        "name_en": "Healthcare - Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_8IFu13L3mbfraub",
+        "name_ar": "",
+        "name_en": "Healthcare - Dermatologist",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_i9TsBUiorFnO5Zp",
+        "name_ar": "أدوات الرعاية الصحية",
+        "name_en": "Healthcare - Gadgets",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_NImfp2DH97i4p1f",
+        "name_ar": "",
+        "name_en": "Healthcare - Neurologist",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_i2YgkKRuYJtc8UH",
+        "name_ar": "",
+        "name_en": "Healthcare - Obstetricians / Gynecologist",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_XYrB6O9yTy5Js4R",
+        "name_ar": "",
+        "name_en": "Healthcare - Online",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_PvD0Pd7yKeCztnX",
+        "name_ar": "",
+        "name_en": "Healthcare - Organic / Herbs",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_ofYiZJXUilEagd8",
+        "name_ar": "",
+        "name_en": "Healthcare - Pharmaceuticals",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_IYx0Ky3h0vOGG7G",
+        "name_ar": "",
+        "name_en": "Healthcare - Physiotherapy",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_NQoO9TSkiMVANGS",
+        "name_ar": "علم النفس",
+        "name_en": "Healthcare - Psychology",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_2arDiLOT6o4RRLZ",
+        "name_ar": "منازل",
+        "name_en": "Home",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_qUIS19fep7aLJyT",
+        "name_ar": "الإكسسوارات المنزلية",
+        "name_en": "Home - Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_VvkgyeMZDWKdHDj",
+        "name_ar": "اجهزة المنزل",
+        "name_en": "Home - Appliances",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_j5RoboDKuL7utbq",
+        "name_ar": "",
+        "name_en": "Home - Bedding",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_0R5OSZyh6lPPtv4",
+        "name_ar": "",
+        "name_en": "Home - Carpets",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_7O5UnFtusZq8acr",
+        "name_ar": "",
+        "name_en": "Home - Curtains / Blinds",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_imMWmQYqITbbaQ0",
+        "name_ar": "",
+        "name_en": "Home - Fire Alarms / Extinguishers",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_HqDaEOuCICiA7Ap",
+        "name_ar": "أثاث المنزل",
+        "name_en": "Home - Furniture",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Snvkb1cdMWWPt79",
+        "name_ar": "",
+        "name_en": "Home - Kitchenware",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_iJGKusZx03IBEgs",
+        "name_ar": "المنزل - الضوء",
+        "name_en": "Home - Light Fixtures",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Nh7CUIUYj6TaNAA",
+        "name_ar": "",
+        "name_en": "Home - Maintenance",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_oNRsXcguYI2kfNR",
+        "name_ar": "",
+        "name_en": "Home - Maintenance Marketplace",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_P0KbGD3PCEsv0kM",
+        "name_ar": "",
+        "name_en": "Home - Mattress",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_PqXQPiYa0jhB4gn",
+        "name_ar": "",
+        "name_en": "Home - Tableware",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_vQejY45GQt1B2eD",
+        "name_ar": "",
+        "name_en": "Hospitality",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_IX8Eg3YpEfOetN0",
+        "name_ar": "",
+        "name_en": "Hospitality - Hotels",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_i7LL7R5b9mYUNuc",
+        "name_ar": "الموارد البشرية",
+        "name_en": "Human Resources",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_n1vJI4IIn7gLhUq",
+        "name_ar": "الزراعة المائية",
+        "name_en": "Hydroponics",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_BfWf63pOmi9FgNU",
+        "name_ar": "مؤثر / بلوغغر",
+        "name_en": "Influencer / Blogger",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_zaJ3LSQycGJTAeg",
+        "name_ar": "مجوهرات",
+        "name_en": "Jewellery",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_JVfzpGULv7SSX9u",
+        "name_ar": "تجهيز حدائق",
+        "name_en": "Landscaping",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_G6lH4pIY30SgGT3",
+        "name_ar": "خدمات قانونية",
+        "name_en": "Legal Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_pxtuJ5EDM7dnCGB",
+        "name_ar": "مدرب الحياة",
+        "name_en": "Life Coach",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_mkyFFUKMePRneJB",
+        "name_ar": "ماشية",
+        "name_en": "Livestock",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_qxhIczyijmcekjW",
+        "name_ar": "خشب",
+        "name_en": "Lumber",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_DSGGErSgH2KlKLn",
+        "name_ar": "",
+        "name_en": "Luxury - Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_LsR6teoOYiq8Adm",
+        "name_ar": "تصنيع",
+        "name_en": "Manufacturing",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_TnSu78EanWqT7Fh",
+        "name_ar": "",
+        "name_en": "Marine",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_KGr9J3YzkMoVRdg",
+        "name_ar": "خدمات التسويق",
+        "name_en": "Marketing Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_pqcz5cBGVQlexFU",
+        "name_ar": "أسواق عبر الإنترنت",
+        "name_en": "Marketplace - Online",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_jvHrfL7kRHLM4mn",
+        "name_ar": "",
+        "name_en": "Marketplace - Professionals / Freelancers",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_saZulpZhvNfDLtd",
+        "name_ar": "خدمات إعلانية",
+        "name_en": "Media Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_k6VDg4pqd9tRKXR",
+        "name_ar": "التصميم الجرافيكي و العلامات التجارية",
+        "name_en": "Media Services - Graphic Design/Branding",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_SJPkHPzFllhCBQx",
+        "name_ar": "معدات طبية",
+        "name_en": "Medical Equipment",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_ZhNBWV2fAcgDUuS",
+        "name_ar": "طبيب",
+        "name_en": "Medical Practitioner",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_IzM8gTSFKuOfnsb",
+        "name_ar": "خدمات طبية",
+        "name_en": "Medical Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_a9m9sxMX9IzfBar",
+        "name_ar": "منظمات",
+        "name_en": "Membership Organization",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_vAffJR1jSe3Fnmz",
+        "name_ar": "البضائع - الاطفال",
+        "name_en": "Merchandise - Infants / Kids",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_GWbi2k5f3TEPthY",
+        "name_ar": "تحويل الأموال",
+        "name_en": "Money Transfers",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_xDKQyUfkOMoSQvZ",
+        "name_ar": "",
+        "name_en": "Music - Instruments / Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_4kq3eY13E80gDL9",
+        "name_ar": "موسيقى و ترفيه",
+        "name_en": "Music/Entertainment",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_khAbF1lls7HSuBV",
+        "name_ar": "منظمة غير ربحية",
+        "name_en": "Non-Profit Organization",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_FcqCaKfCX5T38PR",
+        "name_ar": "حضانة",
+        "name_en": "Nursery",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_MyDm3Am2Eo6mOAq",
+        "name_ar": "اللوازم المكتبية",
+        "name_en": "Office Supplies",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_EUvqjI1BeBrUGHE",
+        "name_ar": "",
+        "name_en": "Optician",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_IDLON5FxQKegLDC",
+        "name_ar": "",
+        "name_en": "Optician - Lenses",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_n7CUoasBvCC7x0T",
+        "name_ar": "أخرى",
+        "name_en": "Other",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_FqVO4fiHrXnDCeq",
+        "name_ar": "الاكسسوارات الخارجية",
+        "name_en": "Outdoor - Hardware / Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_DeNttuGz6hI35Yq",
+        "name_ar": "أسواق الهواء الطلق",
+        "name_en": "Outdoor Markets",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_8q1GVbuGdyl4nC4",
+        "name_ar": "شريك الدفع",
+        "name_en": "Payment Partner",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_ygx9ZtfThhyAh0z",
+        "name_ar": "العطور",
+        "name_en": "Perfumes / Fragrances / Scents",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_2ILx72y4K46P4Ed",
+        "name_ar": "خدمات شخصية",
+        "name_en": "Personal Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_d2Byh3LYsjpyp4a",
+        "name_ar": "",
+        "name_en": "Personal Shopper",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_iAvoLiyre2Ph8H3",
+        "name_ar": "خدمات الحيوانات الأليفة",
+        "name_en": "Pet Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_VC3LfWl2G2iLtsA",
+        "name_ar": "البلاستيك",
+        "name_en": "Plastics",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_ddlFUFWyvKo7VmJ",
+        "name_ar": "بطاقات دفع مسبق",
+        "name_en": "Prepaid Cards",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_IZbXgcC4DYBvJTl",
+        "name_ar": "",
+        "name_en": "Printing",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_CS3gd0RuSNfY45q",
+        "name_ar": "خدمات احترافية",
+        "name_en": "Professional Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_F8nj5bE3RcCdeUV",
+        "name_ar": "",
+        "name_en": "Pulp, Paper & Packaging",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_bQQIBiOerPPARjP",
+        "name_ar": "عقارات",
+        "name_en": "Real Estate",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_YiAh31SDD7pkLog",
+        "name_ar": "العقارات - الإيجار",
+        "name_en": "Real Estate - Rent",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_f3pnm755YdFGM1k",
+        "name_ar": "الترفيهية",
+        "name_en": "Recreation",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_932ymcWK0jIZomh",
+        "name_ar": "",
+        "name_en": "Recycling",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Elt7j24UXK3ZbSW",
+        "name_ar": "خدمات إصلاح",
+        "name_en": "Repair Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_AOi0E7ajEcIr8Vd",
+        "name_ar": "مطعم / مقهى",
+        "name_en": "Restaurant / Cafe",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_FYZF1hxG1hxXfOk",
+        "name_ar": "تجارة التجزئة / البضائع الاستهلاكية",
+        "name_en": "Retail / Consumer Merchandise",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Fid6JrPQu8DFB7I",
+        "name_ar": "المساعدة على الطريق",
+        "name_en": "Road Assistance",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_VuOqYzshIvqty4K",
+        "name_ar": "",
+        "name_en": "Sevonier",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_nlQvurcTGRFf7Ry",
+        "name_ar": "",
+        "name_en": "Social Media",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_c55fBqzyJ55LELb",
+        "name_ar": "",
+        "name_en": "Social Media - Streaming",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_zz4Q16lCrog7Kzd",
+        "name_ar": "",
+        "name_en": "Social Media - Virtual Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_1CMVchiElogPYBq",
+        "name_ar": "",
+        "name_en": "Software - Cloud Services",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Fj26lC6IG5q7H7D",
+        "name_ar": "تطوير و تصميم برمجيات",
+        "name_en": "Software - Development / Design",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Eic2qNMSbzRFE0T",
+        "name_ar": "البرمجيات / صيانة / إصلاح",
+        "name_en": "Software - Maintenance / Support / Repair",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_sAtVSyKy9TzBXaq",
+        "name_ar": "سبا المنتجعات / الجمال / العناية الشخصية",
+        "name_en": "Spas / Beauty / Personal Care",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_6osxZh3RXBhChjh",
+        "name_ar": "الرياضة",
+        "name_en": "Sports",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_zCsL2NOYGUkUq1o",
+        "name_ar": "",
+        "name_en": "Sports - Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_BUeRoPbCK01AkGj",
+        "name_ar": "الرياضة - السيارات",
+        "name_en": "Sports - Automobile",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_IA6C5zAycePSkPK",
+        "name_ar": "",
+        "name_en": "Sports - Equipment",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_bTrjgpkUYveSSQ9",
+        "name_ar": "بضائع رياضيه",
+        "name_en": "Sports - Goods",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_GmL8jObO9NVnCbJ",
+        "name_ar": "نادي رياضي",
+        "name_en": "Sports - Gym",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_2DmueHed0GfH869",
+        "name_ar": "الرياضة - الجمباز",
+        "name_en": "Sports - Gymnastics",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_1ZvRohCpe8UBhiZ",
+        "name_ar": "الرياضة - الاطفال",
+        "name_en": "Sports - Kids",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_cRG5EUDhBprOd9L",
+        "name_ar": "",
+        "name_en": "Sports - Marketplace",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_D20th2eWucLN2dj",
+        "name_ar": "",
+        "name_en": "Sports - Training",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_yo0QN9Nah4vPsF0",
+        "name_ar": "الرياضة والترفيه",
+        "name_en": "Sports and Recreation",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_yaaQ1uGFvDmP5Nz",
+        "name_ar": "ادوات مكتبيه",
+        "name_en": "Stationery",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_4fp8ARbxeK8DmIe",
+        "name_ar": "",
+        "name_en": "Supplies - Cooking",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_jDUgGAlrCngIuDb",
+        "name_ar": "",
+        "name_en": "Supplies - Restautant / Cafe",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_1C2GC8QW4je9Zfc",
+        "name_ar": "التلفاز",
+        "name_en": "TV",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_8JRkkL8IZojTBeE",
+        "name_ar": "تكسي/ليموزين",
+        "name_en": "Taxi/Limo",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Y91Ion5NEPfWQYd",
+        "name_ar": "اكسسوارات التكنولوجيا",
+        "name_en": "Tech Accesories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_t0pocIrWvxfpT0y",
+        "name_ar": "التكنولوجيا - الجمال",
+        "name_en": "Technology - Beauty",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_9TmtEDvX1F1W5Xu",
+        "name_ar": "التكنولوجيا - التعليم",
+        "name_en": "Technology - Education",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_rn1pGO0NtrNSNZ4",
+        "name_ar": "التكنولوجيا - المنزل",
+        "name_en": "Technology - Home",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_fWa9evOzruasgUj",
+        "name_ar": "الاتصالات",
+        "name_en": "Telecom / Internet",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_KloZWCrzkHOpN2l",
+        "name_ar": "اختبارات",
+        "name_en": "Testing",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_U050AldCIPGRu5t",
+        "name_ar": "",
+        "name_en": "Therapy",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_XKuEChXs3SZ2QPW",
+        "name_ar": "التبغ و التدخين",
+        "name_en": "Tobacco",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_pY56Zh6htJF3TH1",
+        "name_ar": "سياحة",
+        "name_en": "Tourism",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_UtSrI6ZQq5c4APF",
+        "name_ar": "جولات ومشاهدة المعالم السياحية",
+        "name_en": "Tours and Sightseeing",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_mdAHAOuXeyU3ES7",
+        "name_ar": "مقاولات",
+        "name_en": "Trade Contractor",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_9v4TP6LCg4LmPcr",
+        "name_ar": "التدريب / ورش العمل",
+        "name_en": "Training / Workshops",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_TMklZh18Y5YSRZ9",
+        "name_ar": "السفر - إكسسوارات",
+        "name_en": "Travel - Accessories",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_OZTUAdkhTh8RFM9",
+        "name_ar": "السفر / الترفيه",
+        "name_en": "Travel / Leisure",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_eIdjZntAXIH8sIS",
+        "name_ar": "",
+        "name_en": "Travel / Leisure - Activities",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_mifylqbfxjgupGZ",
+        "name_ar": "",
+        "name_en": "Travel / Leisure - Airline",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_hV8COj2pMEQnfta",
+        "name_ar": "",
+        "name_en": "Travel / Leisure - Customs",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_1TSgO28o4MG3snK",
+        "name_ar": "",
+        "name_en": "Travel / Leisure - Hotels",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_BzyakRBnlybDZD3",
+        "name_ar": "",
+        "name_en": "Travel / Leisure - Online Travel Agency",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_bcfsJQZTJ72pX15",
+        "name_ar": "",
+        "name_en": "Travel / Leisure - Packages",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_zgSosQEnLu97GtR",
+        "name_ar": "",
+        "name_en": "Travel / Leisure - Spiritual",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_k8KRQtDcUoESQPo",
+        "name_ar": "",
+        "name_en": "Travel / Leisure - Travel Agency",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_9EVdnuyU2dt6sxX",
+        "name_ar": "طب بيطري",
+        "name_en": "Veterinary",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_7cCDlzFElS2aoEB",
+        "name_ar": "التخزين",
+        "name_en": "Warehousing / Storage",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_BaW5t7oBpVpCJHo",
+        "name_ar": "ساعات",
+        "name_en": "Watches",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_1bqgba9SW7N31l8",
+        "name_ar": "تطوير و تصميم مواقع ويب",
+        "name_en": "Web Dev/Design",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_Nmfgfpp9T5KjdKj",
+        "name_ar": "",
+        "name_en": "Wellness - Marketplace",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_g1eZ1QZqGMN5xy0",
+        "name_ar": "",
+        "name_en": "Zakat",
+        "status": "active"
+    },
+    {
+        "sector_id": "sector_aQTm5T7A70IUU1O",
+        "name_ar": "قطاع الاختبار",
+        "name_en": "test sector",
+        "status": "archive"
+    }
+]

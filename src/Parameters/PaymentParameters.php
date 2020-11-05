@@ -18,4 +18,6 @@ class PaymentParameters
     public $postURL;
     public $paymentMethodId;
     public $trackId;
+    public $destination_id;
+    public $transfer_amount;
 }

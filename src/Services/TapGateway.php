@@ -2,13 +2,19 @@
 
 
 namespace beinmedia\payment\Services;
+use beinmedia\payment\models\Business;
+use beinmedia\payment\models\File;
 use beinmedia\payment\models\Tap;
+use beinmedia\payment\Parameters\BusinessParam;
+use beinmedia\payment\Parameters\BusinessParameters;
 use beinmedia\payment\Parameters\ChargeParam;
+use beinmedia\payment\Parameters\FileParameters;
 use beinmedia\payment\Parameters\Post;
 use beinmedia\payment\Parameters\Source;
 use beinmedia\payment\Parameters\Redirect;
 use beinmedia\payment\Parameters\Phone;
 use beinmedia\payment\Parameters\Client;
+
 class TapGateway extends Curl implements PaymentInterface
 {
         public function generatePaymentURL($data)
@@ -24,10 +30,19 @@ class TapGateway extends Curl implements PaymentInterface
             $chargeParam->source=new Source($data->paymentMethodId);
             $chargeParam->currency=$data->currency;
 
+            if(!is_null($data->destination_id)){
+                $chargeParam->destinations = new \stdClass();
+                $destination = new \stdClass();
+                $destination->id = $data->destination_id;
+                $destination->amount = $data->transfer_amount;
+                $destination->currency = $data->currency;
+                $chargeParam->destinations->destination = [$destination];
+            }
+
             if(($data->trackId)<>null){
-            $meta=new \stdClass();
-            $meta->track_id=$data->trackId;
-            $chargeParam->metadata=$meta;
+                $meta=new \stdClass();
+                $meta->track_id=$data->trackId;
+                $chargeParam->metadata=$meta;
             }
 
             $url=$data->postURL;
@@ -82,6 +97,12 @@ class TapGateway extends Curl implements PaymentInterface
                 $newCharge->track_id= $response['metadata']['track_id'];
                 $newCharge->transaction_url = $response['transaction']['url'];
                 $newCharge->transaction_created = $response['transaction']['created'];
+                if(array_key_exists('destinations', $response)){
+                    $newCharge->destination_id = $response['destinations']['destination'][0]['id'];
+                    $newCharge->transfer_amount =  $response['destinations']['destination'][0]['amount'];
+
+                }
+
                 if($response['source']['id']=="src_eg.fawry"){
                     $newCharge->order_reference= $response['transaction']['order']['reference'];
                     $newCharge->post_url= $url;
@@ -130,7 +151,7 @@ class TapGateway extends Curl implements PaymentInterface
                         $charge->json=$jsonResponse;
                         $charge->payment_method=$response['source']['payment_method'];
                         $charge->save();
-                        
+
                         $returnResponse->status=true;
                         return $returnResponse;
                     }
@@ -160,7 +181,7 @@ class TapGateway extends Curl implements PaymentInterface
                 $SecretAPIKey = env('TAP_API_KEY', '');
                 $toBeHashedString = 'x_id' . $id . 'x_amount' . $amount . 'x_currency' . $currency . 'x_gateway_reference' . $gateway_reference . 'x_payment_reference' . $payment_reference . 'x_status' . $status . 'x_created' . $created . '';
                 $myHashString = hash_hmac('sha256', $toBeHashedString, $SecretAPIKey);
-                
+
                 $savedCharge = $this->getPayment($id);
 
                 $returnResponse= new \stdClass();
@@ -169,7 +190,7 @@ class TapGateway extends Curl implements PaymentInterface
 
                 if ($myHashString == $hashString) {
                     echo "Secure Post";
-                    
+
                     $savedCharge->status = $status;
                     $savedCharge->save();
                     if ($savedCharge->status == "CAPTURED")
@@ -182,7 +203,7 @@ class TapGateway extends Curl implements PaymentInterface
                     $returnResponse->status=false;
                 }
                 return $returnResponse;
-                
+
 
             }
         }
@@ -194,10 +215,89 @@ class TapGateway extends Curl implements PaymentInterface
         }
 
 
+/////////////////////////////////////Business && Destinations for multi-vendor/////////////////////////////////////////////////////////////////////
+
+        public function getSectors(){
+            return json_decode(file_get_contents(__DIR__ . '/../sectors.json'), true);
+        }
+
+        public function createFile(FileParameters $data){
+            try {
+                $response = $this->filePostCurl($data, env('TAP_MARKETPLACE_API_KEY'));
+                $file = File::create(['file_id' => $response['id'], 'url' => 'https://api.tap.company/v2'.$response['url'], 'internal_url'=> $data->file , 'filename' => $response['filename'], 'purpose' => $response['purpose'], 'type' => $response['type'], 'size' => $response['size'], 'link_expires_at' => $data->expires_at]);
+                return $file->file_id;
+            }catch(\Exception $e){
+                return $e;
+            }
+        }
+
+        public function getFile($file_id){
+            $file =  File::where('file_id',$file_id)->first();
+            return empty($file)? $file: $file->makeHidden(['id','purpose','link_expires_at']);
+        }
+
+        public function createBusiness(BusinessParameters $data){
+            $requestData = new BusinessParam();
+            $name = new \stdClass();
+            $name->en = $data->business_name;
+            $requestData->name = $name;
+            $requestData->type = $data->type ?? 'ind';
+            $entity = new \stdClass();
+            $entity->legal_name = new \stdClass();
+            $entity->legal_name->en = $data->business_legal_name;
+            $entity->country = $data->business_country;
+            if(!empty($data->documents))
+                $entity->documents = $data->documents;
+            $entity->bank_account = new \stdClass();
+            $entity->bank_account->iban = $data->iban;
+            $requestData->entity=$entity;
+            $requestData->contact_person = $data->contact_person;
+            $brand = new \stdClass();
+            $brand->name = new \stdClass();
+            $brand->name->en = $data->business_name;
+            $brand->sector = $data->sector;
+            $brand->website = $data->website;
+            $requestData->brands = [$brand];
+            $result = $this->postCurl("https://api.tap.company/v2/business", json_encode($requestData),env('TAP_MARKETPLACE_API_KEY'));
+            $err=$result->err;
+
+            $response=$result->response;
+            $response = json_decode($response, true);
 
 
+            if ($err) {
+                return "cURL Error #:" . $err;
+            }
+            else {
+                Business::create(['business_id'=>$response['id'],'entity_id'=>$response['entity']['id'],'name'=>$data->business_name,'type'=>$data->type,'destination_id'=> $response['destination_id'], 'iban' => $data->iban]);
+                return response()->json(['business_id'=>$response['id'], 'entity_id'=>$response['entity']['id'], 'destination_id'=>$response['destination_id']]);
+            }
+        }
 
+        public function getBusiness($business_id){
+            //getBusiness object from internal database
+            return Business::where('business_id',$business_id)->first();
+        }
 
+        public function getTapBusiness($business_id){
+            //get business object from tap
+            $result = $this->getCurl("https://api.tap.company/v2/business/$business_id",env('TAP_MARKETPLACE_API_KEY'));
+            $err=$result->err;
+
+            $response=$result->response;
+            $response = json_decode($response, true);
+
+            if ($err) {
+                return "cURL Error #:" . $err;
+            }
+            else {
+                return $response;
+            }
+        }
+
+        public function getDestinationPaidTransactions($destination_id){
+            return Tap::where('destination_id',$destination_id)->where('status', 'CAPTURED')->get();
+        }
 
 }
 
