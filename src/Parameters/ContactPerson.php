@@ -12,12 +12,12 @@ class ContactPerson
 
     public function __construct($first_name,$last_name, $phone, $email, $identification=null){
         $this->name = new \stdClass();
-        $this->name->en = new \stdClass();
-        $this->name->en->first = $first_name;
-        $this->name->en->last = $last_name;
+        $this->name->first = $first_name;
+        $this->name->last = $last_name;
         $this->contact_info = new \stdClass();
-        $this->contact_info->phone = $phone;
-        $this->contact_info->email = $email;
+        $this->contact_info->primary = new \stdClass();
+        $this->contact_info->primary->phone = $phone;
+        $this->contact_info->primary->email = $email;
         $this->identification = $identification;
     }
 

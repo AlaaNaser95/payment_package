@@ -17,6 +17,7 @@ class CreateBnFilesTable extends Migration
             $table->increments('id');
             $table->string('file_id');
             $table->string('url');
+            $table->string('internal_url');
             $table->string('filename');
             $table->string('purpose');
             $table->string('type');

@@ -4,6 +4,8 @@
 namespace beinmedia\payment\Services;
 
 
+use GuzzleHttp\Client;
+
 class Curl
 {
     public function postCurl(String $url,String $data,String $api_Key, $formData = false){
@@ -81,5 +83,40 @@ class Curl
         curl_close($curl);
 
         return $result;
+    }
+
+    public function filePostCurl($data, String $api_Key)
+    {
+        $client = new Client(['base_uri' => 'https://api.tap.company']);
+        $response = $client->post('/v2/files', [
+            'headers' => [
+                'Authorization' => "Bearer $api_Key"
+            ],
+            'multipart' => [
+                [
+                    'name' => 'purpose',
+                    'contents' => $data->purpose
+                ],
+                [
+                    'name' => 'title',
+                    'contents' => $data->title
+                ],
+                [
+                    'name' => 'expires_at',
+                    'contents' => $data->expires_at
+                ],
+                [
+                    'name' => 'file',
+                    'contents' => fopen($data->file, 'r'),
+                    'headers' => ['Content-Type' => mime_content_type($data->file)]
+
+                ],
+                [
+                    'name' => 'file_link_create',
+                    'contents' => $data->file_link_create
+                ]
+            ]
+        ]);
+        return json_decode($response->getBody()->getContents(),true);
     }
 }

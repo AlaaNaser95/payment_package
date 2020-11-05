@@ -15,6 +15,7 @@ class AddDestinationIdToBnTapPayments extends Migration
     {
         Schema::table('bn_tap_payments', function (Blueprint $table) {
             $table->string('destination_id')->nullable();
+            $table->float('transfer_amount')->nullable();
         });
     }
 
@@ -27,6 +28,7 @@ class AddDestinationIdToBnTapPayments extends Migration
     {
         Schema::table('bn_tap_payments', function (Blueprint $table) {
             $table->dropColumn('destination_id');
+            $table->dropColumn('transfer_amount');
         });
     }
 }
