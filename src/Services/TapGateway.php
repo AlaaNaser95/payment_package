@@ -270,7 +270,7 @@ class TapGateway extends Curl implements PaymentInterface
             }
             else {
                 Business::create(['business_id'=>$response['id'],'entity_id'=>$response['entity']['id'],'name'=>$data->business_name,'type'=>$data->type,'destination_id'=> $response['destination_id'], 'iban' => $data->iban]);
-                return response()->json(['business_id'=>$response['id'], 'entity_id'=>$response['entity']['id'], 'destination_id'=>$response['destination_id']]);
+                return ['business_id'=>$response['id'], 'entity_id'=>$response['entity']['id'], 'destination_id'=>$response['destination_id']];
             }
         }
 
