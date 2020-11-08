@@ -11,14 +11,22 @@ use beinmedia\payment\Parameters\Phone;
 use beinmedia\payment\Parameters\Client;
 class TapGateway extends Curl implements PaymentInterface
 {
-    public function createCharge($data){
+    public function ChargeCard($data){
         try{
-            $returned = processCharge($data);
+            $returned = $this->processCharge($data);
             $result = new \stdClass();
-            $result->url = $returned->response['transaction']['url'];
-            $result->customer_id = $returned->response['customer']['id'];
-            $result->card_id = $returned->response['card']['id'];
-            $result->token_id = $returned->response['source']['id'];
+
+            if(isset($returned->errors)){
+                $result->errors = $returned->errors;
+            }
+            else {
+                $result->url = array_key_exists('url', $returned->response['transaction']) ? $returned->response['transaction']['url'] : null;
+                $result->customer_id = $returned->response['customer']['id'];
+                $result->card_id = $returned->response['card']['id'];
+                $result->token_id = $returned->response['source']['id'];
+                $result->status = $returned->response['status'] == 'CAPTURED' || $returned->response['status'] == 'APPROVED';
+            }
+            return $result;
         }catch (\Exception $e){
             return "Something went wrong";
         }
@@ -77,9 +85,10 @@ class TapGateway extends Curl implements PaymentInterface
 
         $response=$result->response;
         $response = json_decode($response, true);
-
-        if ($err) {
-            return "cURL Error #:" . $err;
+        $returned = new \stdClass();
+        if ($err || array_key_exists('errors', $response)) {
+            $returned->errors =  empty($err)? $response['errors'][0]['description']: $err;
+            return $returned;
         }
         else {
 
@@ -93,7 +102,7 @@ class TapGateway extends Curl implements PaymentInterface
             //$newCharge->description = $response['description'];
             $newCharge->source_id = $response['source']['id'];
             $newCharge->track_id = $response['metadata']['track_id'];
-            $newCharge->transaction_url = $response['transaction']['url'];
+            $newCharge->transaction_url = array_key_exists('url', $response['transaction']) ?$response['transaction']['url']: 'token method';
             $newCharge->transaction_created = $response['transaction']['created'];
             if ($response['source']['id'] == "src_eg.fawry") {
                 $newCharge->order_reference = $response['transaction']['order']['reference'];
@@ -101,17 +110,20 @@ class TapGateway extends Curl implements PaymentInterface
 
             }
             $newCharge->save();
+
+            $returned->newCharge = $newCharge;
+            $returned->response = $response;
+            return $returned;
         }
-        $returned = new \stdClass();
-        $returned->newCahrge = $newCharge;
-        $returned->response = $response;
-        return $returned;
     }
 
         public function generatePaymentURL($data)
         {
             $result = $this->processCharge($data);
             //return payment url
+            if(isset($result->errors)){
+                return $result->errors;
+            }
             return (is_null($result->newCharge->order_reference)? $result->response['transaction']['url']:$result->response['transaction']['order']['reference']);
 
         }
