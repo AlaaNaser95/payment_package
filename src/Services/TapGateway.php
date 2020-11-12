@@ -2,6 +2,7 @@
 
 
 namespace beinmedia\payment\Services;
+use beinmedia\payment\models\Subscription;
 use beinmedia\payment\models\Tap;
 use beinmedia\payment\Parameters\ChargeParam;
 use beinmedia\payment\Parameters\Post;
@@ -9,6 +10,7 @@ use beinmedia\payment\Parameters\Source;
 use beinmedia\payment\Parameters\Redirect;
 use beinmedia\payment\Parameters\Phone;
 use beinmedia\payment\Parameters\Client;
+
 class TapGateway extends Curl implements PaymentInterface
 {
     public function ChargeCard($data){
@@ -21,9 +23,8 @@ class TapGateway extends Curl implements PaymentInterface
             }
             else {
                 $result->url = array_key_exists('url', $returned->response['transaction']) ? $returned->response['transaction']['url'] : null;
-                $result->customer_id = $returned->response['customer']['id'];
-                $result->card_id = $returned->response['card']['id'];
-                $result->token_id = $returned->response['source']['id'];
+                $result->customer_id = array_key_exists('id',$customer = $returned->response['customer'])? $customer['id']: null;
+                $result->card_id = array_key_exists('card', $returned->response)? $returned->response['card']['id']: null;
                 $result->status = $returned->response['status'] == 'CAPTURED' || $returned->response['status'] == 'APPROVED';
             }
             return $result;
@@ -87,7 +88,7 @@ class TapGateway extends Curl implements PaymentInterface
         $response = json_decode($response, true);
         $returned = new \stdClass();
         if ($err || array_key_exists('errors', $response)) {
-            $returned->errors =  empty($err)? $response['errors'][0]['description']: $err;
+            $returned->errors =  empty($err)? $response['errors']: $err;
             return $returned;
         }
         else {
@@ -104,6 +105,10 @@ class TapGateway extends Curl implements PaymentInterface
             $newCharge->track_id = $response['metadata']['track_id'];
             $newCharge->transaction_url = array_key_exists('url', $response['transaction']) ?$response['transaction']['url']: 'token method';
             $newCharge->transaction_created = $response['transaction']['created'];
+            if(array_key_exists('id',$response['customer']))
+                $newCharge->customer_id = $response['customer']['id'];
+            if(array_key_exists('card',$response))
+                $newCharge->card_id = $response['card']['id'];
             if ($response['source']['id'] == "src_eg.fawry") {
                 $newCharge->order_reference = $response['transaction']['order']['reference'];
                 $newCharge->post_url = $url;
@@ -131,15 +136,17 @@ class TapGateway extends Curl implements PaymentInterface
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        //not tested for any payment method
         public function isPaymentExecuted()
         {
             //check request method
             $requestMethod = $_SERVER['REQUEST_METHOD'];
             $chargeId=request('tap_id');
+            if(is_null($chargeId)){
+                $chargeId = request('charge.id');
+            }
 
             //if redirectURl is given in the request body
-            if ($requestMethod == 'GET') {
+            if ($requestMethod == 'GET' || !empty(request('charge.id'))) {
 
                 //retrieve charge
                 //result gives error
@@ -156,7 +163,8 @@ class TapGateway extends Curl implements PaymentInterface
                     $charge=$this->getPayment($chargeId);
                     $returnResponse=new \stdClass();
                     $returnResponse->track_id=$charge->track_id;
-
+                    $returnResponse->card_id=$charge->card_id;
+                    $returnResponse->customer_id = $charge->customer_id;
                     if($response['status']=='CAPTURED' or $response['status']=='APPROVED'){
 
                         //update charge entry in database
@@ -234,15 +242,16 @@ class TapGateway extends Curl implements PaymentInterface
             //use curl method to generate post request
             $result=$this->postCurl("https://api.tap.company/v2/customers",$data,env('TAP_API_KEY'));
             $err=$result->err;
-
             $response=$result->response;
             $response = json_decode($response, true);
-
-            if ($err) {
-                return "cURL Error #:" . $err;
+            $returned = new \stdClass();
+            if ($err || array_key_exists('errors', $response)) {
+                $returned->errors =  empty($err)? $response['errors']: $err;
+                return $returned;
             }
             else {
-                return $response['id'];
+                $returned->custumer_id = $response['id'];
+                return $returned;
             }
         }
 
@@ -271,35 +280,111 @@ class TapGateway extends Curl implements PaymentInterface
 
             $response=$result->response;
             $response = json_decode($response, true);
-
-            if ($err) {
-                return "cURL Error #:" . $err;
+            $returned = new \stdClass();
+            if ($err || !array_key_exists('id', $response)) {
+                $returned->errors =  empty($err)? $response: $err;
             }
             else {
-                return $response['id'];
+                Subscription::create(['subscription_id'=>$response['id'],'card_id'=>$response['charge']['source']['id'],'customer_id'=>$response['charge']['customer']['id'], 'interval'=>$response['term']['interval'],'from'=>$response['term']['from'],'timezone'=>$response['term']['timezone'],'amount'=>$response['charge']['amount'], 'currency'=>$response['charge']['currency'],'description'=>$response['charge']['description'],'track_id'=>$response['charge']['metadata']['track_id'],'status'=>($response['status']=='ACTIVE')]);
+                $returned->id = $response['id'];
+                $returned->status = $response['status'];
             }
+            return $returned;
 
         }
 
         public function cancelSubscription($subscription_id){
-            $result=$this->deleteCurl("https://api.tap.company/v2/subscription/v1/",env('TAP_API_KEY'));
+            $result=$this->deleteCurl("https://api.tap.company/v2/subscription/v1/".$subscription_id ,env('TAP_API_KEY'));
             $err=$result->err;
 
             $response=$result->response;
             $response = json_decode($response, true);
+            $returned = new \stdClass();
 
+            if ($err || !array_key_exists('id', $response)) {
+                $returned->errors =  empty($err)? (reset($response)[0]): $err;
+            }
+            else {
+                Subscription::where('subscription_id', $subscription_id)->update(['status'=>false]);
+                $returned->id = $response['id'];
+                $returned->status = $response['status'];
+            }
+            return $returned;
+        }
+
+        public function getSubscription($subscription_id){
+            return Subscription::where('subscription_id',$subscription_id)->first();
+        }
+
+        public function getTapSubscription($subscription_id){
+            $result=$this->getCurl("https://api.tap.company/v2/subscription/v1/$subscription_id",env('TAP_API_KEY'));
+            $jsonResponse=$result->response;
+            $err=$result->err;
             if ($err) {
                 return "cURL Error #:" . $err;
             }
             else {
-                return $response['id'];
+                return json_decode($jsonResponse, true);
             }
         }
 
+    public function getActiveSubscriptions(){
+        return Subscription::where('status',true)->get();
+    }
 
+    public function getInActiveSubscriptions(){
+        return Subscription::where('status',false)->get();
+    }
 
+    public function getAllSubscriptions(){
+        return Subscription::all();
+    }
 
+    public function getCustomer($customer_id){
+        $result=$this->getCurl("https://api.tap.company/v2/customers/$customer_id",env('TAP_API_KEY'));
+        $jsonResponse=$result->response;
+        $err=$result->err;
+        if ($err) {
+            return "cURL Error #:" . $err;
+        }
+        else {
+            return json_decode($jsonResponse, true);
+        }
+    }
 
+    public function getCard($customer_id, $card_id){
+        $result=$this->getCurl("https://api.tap.company/v2/card/$customer_id/$card_id",env('TAP_API_KEY'));
+        $jsonResponse=$result->response;
+        $err=$result->err;
+        if ($err) {
+            return "cURL Error #:" . $err;
+        }
+        else {
+            return json_decode($jsonResponse, true);
+        }
+    }
+
+    public function verifySubscriptionPayment(){
+
+        $payment = Tap::create(['charge_id'=>request('charge.id'),'amount'=>request('charge.amount'),'currency'=>request('charge.currency'),'status'=>request('charge.status'),'track_id'=>request('metadata.track_id'),'source_id'=>request('charge.source.id'),'transaction_created'=>request('charge.transaction.created'),'customer_id'=>request('charge.customer.id'),'card_id'=>request('charge.source.id'), 'subscription_id'=>request('id')]);
+        $result = new \stdClass();
+        $result->customer_id = $payment->customer_id;
+        $result->card_id = $payment->card_id;
+        $result->status = $payment->status;
+        return $result;
+    }
+
+    public function getSubscriptionPayments($subscription_id){
+        return Tap::where('subscription_id',$subscription_id)->get();
+    }
+
+    public function getFailedSubscriptionPayments($subscription_id){
+        return Tap::where('subscription_id',$subscription_id)->where('status','!=','CAPTURED')->get();
+    }
+
+    public function getCapturedSubscriptionPayments($subscription_id){
+        return Tap::where('subscription_id',$subscription_id)->where('status','CAPTURED')->get();
+    }
 }
 
 
