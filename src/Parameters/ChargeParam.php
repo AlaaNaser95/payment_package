@@ -14,6 +14,7 @@ class ChargeParam
     public $post;
     public $redirect;
     public $destinations;
+    public $save_card;
     public function __construct(){
     }
 
