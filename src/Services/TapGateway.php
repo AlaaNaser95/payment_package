@@ -31,6 +31,7 @@ class TapGateway extends Curl implements PaymentInterface
                 $result->url = array_key_exists('url', $returned->response['transaction']) ? $returned->response['transaction']['url'] : null;
                 $result->customer_id = array_key_exists('id', $customer = $returned->response['customer']) ? $customer['id'] : null;
                 $result->card_id = array_key_exists('card', $returned->response) ? $returned->response['card']['id'] : null;
+                $result->charge_id = $returned->newCharge->charge_id;
                 $result->status = $returned->response['status'] == 'CAPTURED' || $returned->response['status'] == 'APPROVED';
             }
             return $result;
@@ -485,6 +486,7 @@ class TapGateway extends Curl implements PaymentInterface
         $result->customer_id = $payment->customer_id;
         $result->card_id = $payment->card_id;
         $result->status = $payment->status;
+        $result->subscription_id = $payment->subscription_id;
         return $result;
     }
 
