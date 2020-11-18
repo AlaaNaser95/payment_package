@@ -9,6 +9,7 @@ use beinmedia\payment\models\Recurring;
 use Carbon\Carbon;
 use PayPal\Api\Currency;
 use PayPal\Api\MerchantPreferences;
+use PayPal\Api\PayerInfo;
 use PayPal\Api\PaymentDefinition;
 use PayPal\Api\Plan;
 use PayPal\Rest\ApiContext;
@@ -45,7 +46,7 @@ class PaypalRecurring extends Curl
         $plan = new Plan();
         $plan->setName($planParam->planName)
             ->setDescription($planParam->description)
-            ->setType('FIXED');//fixed
+            ->setType('INFINITE');//fixed
 
         $paymentDefinition = new PaymentDefinition();
 
@@ -53,13 +54,15 @@ class PaypalRecurring extends Curl
         ->setType('REGULAR')//fixed
         ->setFrequency('Month')//fixed
         ->setFrequencyInterval($planParam->interval)
-            ->setCycles("100")//fixed
+            ->setCycles("0")//fixed
             ->setAmount(new Currency(array('value' => $planParam->amount, 'currency' => $planParam->currency)));
 
         $merchantPreferences = new MerchantPreferences();
 
         $merchantPreferences->setReturnUrl($planParam->returnURL . "?success=true")
             ->setCancelUrl($planParam->cancelURL . "?success=false")
+            ->setAutoBillAmount("yes")
+            ->setInitialFailAmountAction("CONTINUE")
             ->setMaxFailAttempts("0")
             ->setAutoBillAmount("yes"); //fixed
 
@@ -69,9 +72,13 @@ class PaypalRecurring extends Curl
         try {
             $createdPlan = $plan->create($this->apiContext);
 
-            $activatedPlan = $this->updatePlan($createdPlan);
+            $this->updatePlan($createdPlan);
 
-            OurPlan::create([
+        } catch (Exception $ex) {
+            $this->customLog('info', 'plan not created or not updated ', ["Created Plan", "Plan", null, $plan, $ex]);
+            die($ex);
+        }
+            $internallyCreatedPlan = OurPlan::create([
                 'gateway' => 'paypal',
                 'plan_id' => $createdPlan->getId(),
                 'description' => $createdPlan->getDescription(),
@@ -80,12 +87,7 @@ class PaypalRecurring extends Curl
                 'json' => $createdPlan
             ]);
 
-            return $activatedPlan;
-
-        } catch (Exception $ex) {
-            exit(1);
-        }
-
+            return $internallyCreatedPlan;
     }
 
 
@@ -129,13 +131,14 @@ class PaypalRecurring extends Curl
 
     /**
      * @param $plan_id
+     * @param $name
+     * @param $description
+     * @param $payer_info
      * @return Agreement
      */
 
-    public function createAgreement($plan_id, $name, $description)
+    public function createAgreement($plan_id, $name, $description, $payer_info = null)
     {
-        session(['our_plan_id' => $plan_id]);
-
         $ourPlan = OurPlan::where('plan_id', $plan_id)->first();
         $ds = Carbon::now()->addMinutes(10)->toIso8601String();
         $ds = substr($ds, 0, 19);
@@ -143,7 +146,7 @@ class PaypalRecurring extends Curl
 
         $agreement = new \PayPal\Api\Agreement();
         $agreement->setName($name)
-            ->setDescription($description)
+            ->setDescription($description. ',ref:'.$ourPlan->id)
             ->setStartDate($ds);
 
         $plan = new Plan();
@@ -154,17 +157,23 @@ class PaypalRecurring extends Curl
         //Add Payer
         $payer = new Payer();
         $payer->setPaymentMethod('paypal');
+        if(!is_null($payer_info)) {
+            $payer->setPayerInfo(new PayerInfo([
+                "email" => $payer_info->email,
+                "first_name" => $payer_info->name,
+                "last_name" => $payer_info->restaurant_name,
+                "payer_id" => $payer_info->payer_id
+            ]));
+        }
+
         $agreement->setPayer($payer);
 
         try {
             $createdAgreement = $agreement->create($this->apiContext);
             $approvalUrl = $createdAgreement->getApprovalLink();
-
-            session(['url' => $approvalUrl]);
-
             return $approvalUrl;
         } catch (Exception $ex) {
-            exit(1);
+            return $ex->getMessage();
         }
     }
 
@@ -184,29 +193,38 @@ class PaypalRecurring extends Curl
 
                 $agreementDetails = $created_agreement->getAgreementDetails();
 
-                Agreement::create([
+                $ref = explode('ref:', $created_agreement->getDescription())[1] ?? '';
+
+                $ref = explode(',', $ref);
+
+                $plan = trim($ref[0] ?? null);
+
+                if ($plan)
+                    $plan = OurPlan::find($plan);
+                else
+                    return 'Invalid Plan, please try later';
+
+                return Agreement::create([
                     'gateway' => 'paypal',
                     'agreement_id' => $agreementId,
-                    'approval_link' => session('url'),
                     'description' => $created_agreement->getDescription(),
-                    'plan_id' => session('our_plan_id'),
+                    'plan_id' => $plan->plan_id,
                     'cycles_remaining' => $agreementDetails->getCyclesRemaining(),
                     'cycles_completed' => $agreementDetails->getCyclesCompleted(),
                     'next_billing_date' => $agreementDetails->getNextBillingDate(),
                     'last_payment_date' => $agreementDetails->getLastPaymentDate()
                 ]);
-                return true;
             } catch (PayPalConnectionException $ex) {
                 \Log::info(json_encode($ex));
-                echo $ex->getCode();
-                echo $ex->getData();
-                die($ex);
+                report($ex);
+                return $ex->getMessage();
             } catch (Exception $ex) {
                 \Log::info(json_encode($ex));
-                die($ex);
+                report($ex);
+                return $ex->getMessage();
             }
         } else {
-            return false;
+            return 'Invalid payment link';
         }
     }
 
@@ -215,10 +233,11 @@ class PaypalRecurring extends Curl
     {
         try {
             $agreement = \PayPal\Api\Agreement::get($id, $this->apiContext);
+            return $agreement;
         } catch (Exception $ex) {
-            exit(1);
+            report($ex);
+            return false;
         }
-        return $agreement;
     }
 
     public function checkAgreementPayed($agreement_id)
@@ -256,12 +275,13 @@ class PaypalRecurring extends Curl
 
             $ourAgreement = Agreement::where('agreement_id', $agreementId)->first();
             $ourAgreement->state = $agreement->getState();
+            $ourAgreement->save();
+            return $agreement;
 
         } catch (Exception $ex) {
-            exit(1);
+            report($ex);
+            return false;
         }
-
-        return $agreement;
     }
 
     //not tested
@@ -283,11 +303,8 @@ class PaypalRecurring extends Curl
     {
 
         $webhook = new \PayPal\Api\Webhook();
-        if (env('PAYPAL_RECURRING_TESTING_MODE')) {
-            $webhook->setUrl(env('PAYPAL_RECURRING_TESTING_WEBHOOK_URL') . '/webhookresponse');
-        } else {
-            $webhook->setUrl(url('/webhookresponse'));
-        }
+        $webhook->setUrl(env('PAYPAL_RECURRING_TESTING_WEBHOOK_URL'));
+
         $webhookEventTypes = array();
 
         //will get notified once the agreement is cancelled
@@ -316,7 +333,8 @@ class PaypalRecurring extends Curl
             $output = $webhook->create($this->apiContext);
             return $output;
         } catch (Exception $ex) {
-            exit(1);
+            report($ex);
+            return false;
         }
 
     }
@@ -375,10 +393,10 @@ class PaypalRecurring extends Curl
 
         }
 
-        $url=env('RECURRING_NOTIFICATION_URL','');
+        //$url=env('RECURRING_NOTIFICATION_URL','');
 
         try {
-            $this->notifyUser($data,$url);
+            return $data;
         }
         catch(Exception $ex){
 
