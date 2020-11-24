@@ -134,10 +134,11 @@ class PaypalRecurring extends Curl
      * @param $name
      * @param $description
      * @param $payer_info
+     * @param $reference_id
      * @return Agreement
      */
 
-    public function createAgreement($plan_id, $name, $description, $payer_info = null)
+    public function createAgreement($plan_id, $name, $description, $payer_info = null, $reference_id)
     {
         $ourPlan = OurPlan::where('plan_id', $plan_id)->first();
         $ds = Carbon::now()->addMinutes(10)->toIso8601String();
@@ -146,7 +147,7 @@ class PaypalRecurring extends Curl
 
         $agreement = new \PayPal\Api\Agreement();
         $agreement->setName($name)
-            ->setDescription($description. ',ref:'.$ourPlan->id)
+            ->setDescription($description. ',ref:'.$ourPlan->id.','.$reference_id)
             ->setStartDate($ds);
 
         $plan = new Plan();
@@ -198,6 +199,7 @@ class PaypalRecurring extends Curl
                 $ref = explode(',', $ref);
 
                 $plan = trim($ref[0] ?? null);
+                $reference_id = trim($ref[1] ?? null);
 
                 if ($plan)
                     $plan = OurPlan::find($plan);
@@ -209,6 +211,7 @@ class PaypalRecurring extends Curl
                     'agreement_id' => $agreementId,
                     'description' => $created_agreement->getDescription(),
                     'plan_id' => $plan->plan_id,
+                    'reference_id' => $reference_id,
                     'cycles_remaining' => $agreementDetails->getCyclesRemaining(),
                     'cycles_completed' => $agreementDetails->getCyclesCompleted(),
                     'next_billing_date' => $agreementDetails->getNextBillingDate(),
