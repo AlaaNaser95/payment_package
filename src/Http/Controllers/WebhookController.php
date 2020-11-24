@@ -2,9 +2,9 @@
 
 namespace beinmedia\payment\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use beinmedia\payment\Services\PaypalRecurring;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class WebhookController extends Controller
 {
