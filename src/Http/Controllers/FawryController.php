@@ -4,9 +4,9 @@
 namespace beinmedia\payment\Http\Controllers;
 
 
-use App\Http\Controllers\Controller;
 use beinmedia\payment\Services\TapGateway;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class FawryController extends Controller
 {

@@ -263,8 +263,8 @@ Once the payment is executed, the post url provided will be requested by Tap, Yo
 
 * *generatePaymentURL($paymentParameters)*
 
-This Method reurns the url where the user should be redirected to proceed the payment. 
-Fo fawry, this method return the order number not the payment URL, user will pay using this number in any fawry center.
+This Method returns the url where the user should be redirected to proceed the payment. It can be used for both credit and debit cards but not for direct payment. 
+For fawry, this method return the order number not the payment URL, user will pay using this number in any fawry center.
 
 ``` bash
 <?php
@@ -286,6 +286,8 @@ $data->amount=10; // float amount
 $data->description="dfghjk";
 $data->paymentMethodId="src_eg.fawry";
 $data->currency="EGP"; // Iso currency
+$data->destination_id = '1235'; //the destination_id returned from create business (used for multivendor)
+$data->transfer_amount = 9; // the amount that will be transfered to the business in case destination_id is specified; 
 
 // For fawry only - To get notification once the payment is completed (Asyncronous payment)
 $data->postURL=url('/api/fawry-check'); // Fully qualified url (Only Post method routs are allowed).
@@ -295,6 +297,46 @@ $data->returnURL=url("tap-check"); // Fully qualified url where the user will be
 
 //Getting the payment link where the user should be redirected to
 $paymentLink = TapPayment::generatePaymentURL($data);
+```
+
+* *ChargeCard()*
+
+This Method returns the payment status, card id charge id and customer id. It can be used to charge credit cards with direct payment using tap card.js library. 
+
+``` bash
+<?php
+
+use beinmedia\payment\Parameters\PaymentParameters;
+use TapPayment;
+
+        //for fawry add postURL only
+        //for other method add redirectURL only
+        $data=new PaymentParameters();
+        $data->email="alaanaser95.95@gmail.com";
+        $data->name="Alaa";
+        $data->returnURL=url("tap-check");
+        $data->countryCode="965";
+        $data->phoneNumber="65080631";
+        $data->amount=10;
+        $data->description="dfghjk";
+        $data->paymentMethodId="tok_Ck8tJ1311012ntXJ527473";// the one time token created with tap card.js library
+        $data->currency="KWD";
+        $data->trackId="1234";
+        $data->destination_id = '1234';
+        $data->transfer_amount = 9;
+
+        //Charge the credit card and get the response
+        $paymentLink = TapPayment::ChargeCard($data);
+
+/*
+Response Eample
+{
+"card_id" : "card_576789",
+"customer_id" : "cus_43465789",
+"charge_id" : "ch_5476769",
+"status" : true 
+}
+*/
 ```
 
 * *isPayementExecuted()*
@@ -313,6 +355,172 @@ public function checkTapPayment (Request $request){
         return ‘fail’;
 }
 ```
+
+## Tap Recurring Payments
+
+If you want to create subscription to periodically charge customer card with specific amount you need to create a subscription. Subscriptions are available only for credit cards ('visa', 'master', 'amex').
+
+You can get the card_id and customer_id from chargeCard() method.
+
+**Methods**
+
+* *createSubscription()*
+
+```bash
+use beinmedia\payment\Services\TapGateway;
+use beinmedia\payment\Parameters\SubscriptionCharge;
+use beinmedia\payment\Parameters\SubscriptionParameters;
+use beinmedia\payment\Parameters\SubscriptionTerm;
+
+public function createSubscription(){
+        $term = new SubscriptionTerm();
+        $term->interval = "DAILY"; //("DAILY","YEARLY","MONTHLY",...etc)
+        $term->period = 10; //How many times you want to charge the customer card
+        $term->from = "2020-11-12 16:08:00"; "the start time for the charge
+        $term->due = 0; 
+        $term->auto_renew = true; //true if you want to renew the subscription automatically
+        $term->timezone = "Asia/Kuwait"; //the timezone for which the start time for ythe charge is specified
+
+        $charge = new SubscriptionCharge();
+        $charge->amount = 10; //thre amount to be charged
+        $charge->currency = "KWD"; //the currency of charge amount
+        $charge->description = "This is a test subscription";
+        $charge->metadata->track_id = "123456789910"; //A custom reference_id 
+        $charge->reciept->email = true; //optional
+        $charge->reciept->sms = true; //optional
+        $charge->customer->id = 'cus_TS024820201200n5X50811060'; //customer_id returned from ChargeCard() method
+        $charge->source->id = 'card_CFlTu1311012JanD527931'; //card_id returned from ChargeCard() method
+        $charge->post->url = 'https://3b2429fb7e8b.ngrok.io/api/handle'; // post url where you want to be notified once a periodic payment is done.
+
+        //Create subscription and get the subscription_id and status
+        $data = new SubscriptionParameters($term,$charge);
+        $response = app(TapGateway::class)->createSubscription($data);
+        return response()->json(['response'=>$response]);
+    }
+
+/*
+Response Eample
+{
+"status" : "active",
+"id" : "sub_43465789",
+}
+*/
+```
+
+* *verifySubscriptionPayment()*
+
+Call this method on the post url you specified in the createSubscription to verify the payment of the subscription.
+
+```bash
+use beinmedia\payment\Services\TapGateway;
+
+public function handleRecurring(){
+        $response = app(TapGateway::class)->verifySubscriptionPayment();
+
+        //you can call this for more verificattion:
+        //$response = app(TapGateway::class)->isPaymentExecuted();
+
+        if($response->status == true){
+            return 'success';
+        }
+        return 'failed';
+    }
+```
+
+* *cancelSubscription()*
+
+```bash
+    public function cancelSubscription(){
+        return app(TapGateway::class)->cancelSubscription('sub_Xr8s3820200900r5L51211982')]);
+    }
+```
+
+## TAP Multi Vendors (Subscriptions)
+> **Configuration**
+
+At .env file set the following:
+
+```bash
+TAP_MARKETPLACE_API_KEY = sk_test_fEZYI3X1P7865rtsoGpbvw4qBm
+```
+
+**Available Methods:**
+
+* *getSectors()*
+
+Get a list of all sectors that tap supports in order to add one of the sector id when creating the business.
+
+```bash
+    public function getSectors(){
+        return app(TapGateway::class)->getSectors($fileParameters);
+    }
+```
+
+* *createFile()*
+
+```bash
+    public function createFile(){
+        $filename = time().'.'.request('file')->getClientOriginalExtension();
+        request('file')->move('storage', $filename);
+        $filePath = "storage/$filename";
+        $purpose = 'identifcation_document';
+        $fileParameters = new FileParameters($filePath, $filename, $purpose);
+        return app(TapGateway::class)->createFile($fileParameters);
+    }
+```
+
+* *createBusiness()*
+
+To add new business details so that any charge created with the business destination_id will be transfered to the business bank account directly.
+
+```bash
+
+use beinmedia\payment\Services\TapGateway;
+
+    public function createBusiness(){
+        $civil_id = new \stdClass();
+        $civil_id->type = 'civil id';
+        $civil_id->issuing_country = 'KW';
+        $civil_id->issuing_date = '2020-01-01';
+        $civil_id->expiry_date = '2021-01-01';
+        $civil_id->images = ['file_773153834221826048']; //the file_id returned from createFile method as array 
+        $civil_id->number = '295102500437'; //civil_id number
+        $contact_person = new ContactPerson('Alaa','Naser',new Phone('965','65080631'),'alaanser95.95@gmail.com', [$civil_id]);
+
+        $authorization = new \stdClass();
+        $authorization->type = 'authorized_signature';
+        $authorization->issuing_country = 'KW';
+        $authorization->issuing_date = '2020-01-01';
+        $authorization->expiry_date = '2021-01-01';
+        $authorization->images = ['file_773150399938293760']; //the file_id returned from createFile method as array
+        $authorization->number = '295102500437'; //authorized signature number
+
+        $license = new \stdClass();
+        $license->type = 'license';
+        $license->issuing_country = 'KW';
+        $license->issuing_date = '2020-01-01';
+        $license->expiry_date = '2021-01-01';
+        $license->images = ['file_773155798586355712']; //the file_id returned from createFile method as array 
+        $license->number = '295102500437'; //commercial license number
+
+        $parameters = new BusinessParameters();
+        $parameters->business_name = 'test12121';
+        $parameters->type = 'corp';
+        $parameters->business_legal_name = 'test company for testing21212';
+        $parameters->business_country = 'KW';
+        $parameters->iban = 'erj54r73658647246928724';
+        $parameters->contact_person = $contact_person;
+        $parameters->sector = ['sector_Vi2Dy828EgUeDVJ']; //returned from getSetors() method
+        $parameters->website = 'https://oktabletmenu1.com';
+        $parameters->documents = [$authorization, $license];
+
+        return app(TapGateway::class)->createBusiness($fileParameters);
+
+```
+
+
+
+
 ---
 ## Paypal recurring payments
 
