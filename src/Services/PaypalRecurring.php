@@ -148,7 +148,7 @@ class PaypalRecurring extends Curl
         $agreement = new \PayPal\Api\Agreement();
         $agreement->setName($name)
             ->setDescription($description. ',ref:'.$ourPlan->id.','.$reference_id)
-            ->setStartDate($ds);
+            ->setStartDate(date('Y-m-d\TH:i:s\Z', time() + 60 * 10));
 
         $plan = new Plan();
         $plan->setId($ourPlan->plan_id);
@@ -161,8 +161,8 @@ class PaypalRecurring extends Curl
         if(!is_null($payer_info)) {
             $payer->setPayerInfo(new PayerInfo([
                 "email" => $payer_info->email,
-                "first_name" => $payer_info->name,
-                "last_name" => $payer_info->restaurant_name,
+                "first_name" => $payer_info->first_name,
+                "last_name" => $payer_info->last_name,
                 "payer_id" => $payer_info->payer_id
             ]));
         }
@@ -402,7 +402,7 @@ class PaypalRecurring extends Curl
             return $data;
         }
         catch(Exception $ex){
-
+            \Log::debug($ex);
             die($ex);
 
         }
