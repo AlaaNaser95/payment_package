@@ -30,7 +30,7 @@ class TapGateway extends Curl implements PaymentInterface
             } else {
                 $result->url = array_key_exists('url', $returned->response['transaction']) ? $returned->response['transaction']['url'] : null;
                 $result->customer_id = array_key_exists('id', $customer = $returned->response['customer']) ? $customer['id'] : null;
-                $result->card_id = array_key_exists('card', $returned->response) ? $returned->response['card']['id'] : null;
+                $result->card_id = array_key_exists('card', $returned->response)  && array_key_exists('id', $returned->response['card'])? $returned->response['card']['id'] : null;
                 $result->charge_id = $returned->newCharge->charge_id;
                 $result->status = $returned->response['status'] == 'CAPTURED' || $returned->response['status'] == 'APPROVED';
             }
@@ -126,7 +126,7 @@ class TapGateway extends Curl implements PaymentInterface
             }
             if (array_key_exists('id', $response['customer']))
                 $newCharge->customer_id = $response['customer']['id'];
-            if (array_key_exists('card', $response))
+            if (array_key_exists('card', $response) && array_key_exists('id', $response['card']))
                 $newCharge->card_id = $response['card']['id'];
             if ($response['source']['id'] == "src_eg.fawry") {
                 $newCharge->order_reference = $response['transaction']['order']['reference'];
@@ -189,7 +189,11 @@ class TapGateway extends Curl implements PaymentInterface
                     $charge->status = "CAPTURED";
                     $charge->json = $jsonResponse;
                     $charge->payment_method = $response['source']['payment_method'];
+                    $charge->card_id = (array_key_exists('card',$response) && array_key_exists('id',$response['card']))?$response['card']['id']: null;
+                    $charge->customer_id = array_key_exists('id', $customer = $response['customer']) ? $customer['id'] : null;
                     $charge->save();
+                    $returnResponse->card_id = $charge->card_id;
+                    $returnResponse->customer_id = $charge->customer_id;
 
                     $returnResponse->status = true;
                     return $returnResponse;
