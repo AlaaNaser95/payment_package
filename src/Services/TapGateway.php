@@ -183,6 +183,7 @@ class TapGateway extends Curl implements PaymentInterface
                 $returnResponse->track_id = $charge->track_id;
                 $returnResponse->card_id = $charge->card_id;
                 $returnResponse->customer_id = $charge->customer_id;
+                $returnResponse->tap_id = $charge->charge_id;
                 if ($response['status'] == 'CAPTURED' or $response['status'] == 'APPROVED') {
 
                     //update charge entry in database
