@@ -10,8 +10,8 @@ class Agreement extends Model
     protected $table='bn_agreements';
     protected $guarded = ['id'];
 
-    public function OurPlan()
+    public function ourPlan()
     {
-        return $this->belongsTo('beinmedia\payment\models\OurPlan');
+        return $this->belongsTo('beinmedia\payment\models\OurPlan', 'plan_id', 'plan_id');
     }
 }

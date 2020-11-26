@@ -377,8 +377,10 @@ class PaypalRecurring extends Curl
             $ourAgreement->cycles_completed = $agreementDetails->getCyclesCompleted();
             $ourAgreement->save();
 
-            $data='{"event_type" : '.$event_type.' ,"agreement_id" : '.$agreementId.', "payment_id" : '.$data['id'].'}';
-
+            $response = new \stdClass();
+            $response->event_type = $event_type;
+            $response->agreement_id = $agreementId;
+            $response->payment_id = $data['id'];
 
         }
 
@@ -391,9 +393,9 @@ class PaypalRecurring extends Curl
             $ourAgreement = Agreement::where('agreement_id', $agreementId)->first();
             $ourAgreement->state = $agreement->getState();
             $ourAgreement->save();
-
-            $data='{"event_type" : '.$event_type.' ,"agreement_id" : '.$agreementId.'}';
-
+            $response = new \stdClass();
+            $response->event_type = $event_type;
+            $response->agreement_id = $agreementId;
         }
 
         //$url=env('RECURRING_NOTIFICATION_URL','');

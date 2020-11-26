@@ -10,6 +10,6 @@ class OurPlan extends Model
     protected $guarded = ['id'];
     public function agreements()
     {
-        return $this->hasMany('beinmedia\payment\models\Agreement');
+        return $this->hasMany('beinmedia\payment\models\Agreement','plan_id','plan_id');
     }
 }
