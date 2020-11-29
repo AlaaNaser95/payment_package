@@ -175,7 +175,7 @@ class TapGateway extends Curl implements PaymentInterface
             $response = json_decode($jsonResponse, true);
 
             if ($err) {
-                return "cURL Error #:" . $err;
+                return ['error' => 1, 'message' => 'There is an error happened'];
             } else {
 
                 $charge = $this->getPayment($chargeId);
