@@ -35,13 +35,12 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $response = json_decode($response, true);
 
         if ($err) {
-            return "cURL Error #:" . $err;
-        } else
-            {
-            if($response["IsSuccess"]){
+            return ['error' => 1, 'message' => 'There is an error happened'];
+
+        } else {
+            if (isset($response["IsSuccess"]) && $response["IsSuccess"]) {
                 return $response["Data"]["PaymentMethods"];
-            }
-            else{
+            } else {
                 return $response["ValidationErrors"];
             }
 
@@ -79,9 +78,9 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $response = json_decode($response, true);
 
         if ($err) {
-            return "cURL Error #:" . $err;
+            return ['error' => 1, 'message' => 'There is an error happened'];
         } else {
-            if ($response["IsSuccess"]) {
+            if (isset($response["IsSuccess"]) && $response["IsSuccess"]) {
 
                 //create new payment entry in the database
                 $payment = new MyFatoorah();
@@ -125,7 +124,7 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
 
         if ($err) {
 
-            return "cURL Error #:" . $err;
+            return ['error' => 1, 'message' => 'There is an error happened'];
 
         } else {
             $payment = $this->getPayment($response["Data"]["InvoiceId"]);
