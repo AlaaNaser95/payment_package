@@ -295,7 +295,9 @@ class TapGateway extends Curl implements PaymentInterface
         if (!empty($data->documents))
             $entity->documents = $data->documents;
         $entity->bank_account = new \stdClass();
-        $entity->bank_account->iban = $data->iban;
+        $entity->bank_account->iban = !is_null($data->iban)? $data->iban : $data->account_number;
+        $entity->bank_account->swift_code = $data->swift_code;
+        $entity->bank_account->account_number = $data->account_number;
         $requestData->entity = $entity;
         $requestData->contact_person = $data->contact_person;
         $brand = new \stdClass();
@@ -314,7 +316,8 @@ class TapGateway extends Curl implements PaymentInterface
         if ($err) {
             return "cURL Error #:" . $err;
         } else {
-            Business::create(['business_id' => $response['id'], 'entity_id' => $response['entity']['id'], 'name' => $data->business_name, 'type' => $data->type, 'destination_id' => $response['destination_id'], 'iban' => $data->iban]);
+            $bank_account = $response['entity']['wallets'][0]['bank_account'];
+            Business::create(['business_id' => $response['id'], 'entity_id' => $response['entity']['id'], 'name' => $data->business_name, 'type' => $data->type, 'destination_id' => $response['destination_id'], 'bank_id'=> $response['entity']['wallets'][0]['bank_account']['id'], 'iban' => $response['entity']['wallets'][0]['bank_account']['iban'], 'account_number' => array_key_exists('account_number',$bank_account)? $bank_account['account_number']: null,'swift_code'=>array_key_exists('swift_code',$bank_account)? $bank_account['swift_code']: null]);
             return ['business_id' => $response['id'], 'entity_id' => $response['entity']['id'], 'destination_id' => $response['destination_id']];
         }
     }

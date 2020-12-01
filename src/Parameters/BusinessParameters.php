@@ -11,6 +11,8 @@ class BusinessParameters
     public $business_legal_name;
     public $business_country; //iso country code
     public $iban;
+    public $swift_code;
+    public $account_number;
     public $contact_person;// contact person object
     public $sector;// sector id from sector api.
     public $website;

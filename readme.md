@@ -508,7 +508,9 @@ use beinmedia\payment\Services\TapGateway;
         $parameters->type = 'corp';
         $parameters->business_legal_name = 'test company for testing21212';
         $parameters->business_country = 'KW';
-        $parameters->iban = 'erj54r73658647246928724';
+        $parameters->iban = 'erj54r73658647246928724'; //if iban is not added then swift_code and account_number are required
+        $parameters->swift_code = '1234567890'; //optinal if iban is provided
+        $parameters->account_number = 'acc_12345567890'; //optional if iban is provided
         $parameters->contact_person = $contact_person;
         $parameters->sector = ['sector_Vi2Dy828EgUeDVJ']; //returned from getSetors() method
         $parameters->website = 'https://oktabletmenu1.com';
