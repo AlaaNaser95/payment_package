@@ -306,7 +306,7 @@ class PaypalRecurring extends Curl
     {
 
         $webhook = new \PayPal\Api\Webhook();
-        $webhook->setUrl(env('PAYPAL_RECURRING_TESTING_WEBHOOK_URL'));
+        $webhook->setUrl(env('PAYPAL_RECURRING_WEBHOOK_URL'));
 
         $webhookEventTypes = array();
 

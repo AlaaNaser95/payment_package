@@ -527,22 +527,12 @@ use beinmedia\payment\Services\TapGateway;
 > **Configuration**
 
 At .env file set the following:
-
-(For testing mode)
-- If you are still testing and not live set the testing mode to true.
-``` bash
-PAYPAL_RECURRING_TESTING_MODE = true
 ```
-- Add your base url for the published version of your project (you can use ngrok for testing. 
+- Add your webhook URL where you will get notified once a subscrbtion is canceled or recurring payment is completed (you can use ngrok for testing. 
 ``` bash
-PAYPAL_RECURRING_TESTING_WEBHOOK_URL=https://b2015d91.ngrok.io
+PAYPAL_RECURRING_WEBHOOK_URL=https://b2015d91.ngrok.io/webhook
 ```
 
-(For testing & live mode)
-- Specify the webhook url where you will receive post notifications whenever user cancels the agreement or a payment is done for the agreement.(Fully qualified **published** url should be added).
-``` bash
-RECURRING_NOTIFICATION_URL=https://b2015d91.ngrok.io/webhookresponse
-```
 **Create webhook**
 
 This webhook needs to be created only once while live to allow the package recieve notifications from paypal.
@@ -583,14 +573,19 @@ $planParam->cancelURL="https://www.tapcom.com/"; // // Fully qualified url where
 $createdPlanObject= PaypalRecurring::createPlan($planParam);
 ```
 
-* *createAgreement($plan_id, $agreement_name, $agreement_description))*
+* *createAgreement($plan_id, $agreement_name, $agreement_description, $payer_info, $reference_id))*
 ``` bash
 <?php
 
 use PaypalRecurring;
 
+ $payer_info = new PayerInfoParameters();
+        $payer_info->email='alaanaser95.95@gmail.com';
+        $payer_info->first_name = 'Alaa';
+        $payer_info->last_name = 'Naser';
+        $payer_info->payer_id = '987654321';
 // Generate agreement url where the user should be redirected to
-$agreementLink = PaypalRecurring::createAgreement('P-3D407875MD555251WQYZQOJA','Alaa','MyAgreement');
+$agreementLink = PaypalRecurring::createAgreement('P-3D407875MD555251WQYZQOJA','Alaa','MyAgreement', $payer_info, "123456789");
 
 ```
 * *executeAgreement()*
@@ -602,7 +597,9 @@ use PaypalRecurring;
 
 public function executeAgreement(Request $request){
 
-    return (PaypalRecurring::executeAgreement())?'Success' : 'Fail');
+    if(PaypalRecurring::executeAgreement() instanceof Agreement)
+            return 'yes';
+    return 'No';
 }
 
 ```
