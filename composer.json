@@ -12,7 +12,7 @@
     "homepage": "https://github.com/AlaaNaser95/payment_package",
     "keywords": ["Laravel", "payment"],
     "require": {
-        "illuminate/support": "~5|~6 |~7",
+        "illuminate/support": "~5|~6 |~7|~8",
         "paypal/rest-api-sdk-php": "*"
     },
     "require-dev": {
