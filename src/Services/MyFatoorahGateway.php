@@ -35,13 +35,14 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $response = json_decode($response, true);
 
         if ($err) {
-            return ['error' => 1, 'message' => 'There is an error happened'];
-
+            \Log::error("Curl error while getting myfatoorah methods.\nError:\n" . json_encode($err));
+            abort(500, 'Something went wrong while Getting payment methods');
         } else {
             if (isset($response["IsSuccess"]) && $response["IsSuccess"]) {
                 return $response["Data"]["PaymentMethods"];
             } else {
-                return $response["ValidationErrors"];
+                \Log::error("Validation errors while getting myfatoorah methods.\nData:\n$data\nErrors:\n" . json_encode($response));
+                abort(500, 'Something went wrong while getting payment methods');
             }
 
         }
@@ -78,27 +79,33 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $response = json_decode($response, true);
 
         if ($err) {
-            return ['error' => 1, 'message' => 'There is an error happened'];
+            \Log::error("Curl error while generating myfatoorah payment url.\nError:\n" . json_encode($err));
+            abort(500, 'Something went wrong while processing payment');
         } else {
             if (isset($response["IsSuccess"]) && $response["IsSuccess"]) {
+                try {
+                    //create new payment entry in the database
+                    $payment = new MyFatoorah();
+                    $payment->invoice_id = $response["Data"]["InvoiceId"];
+                    $payment->payment_url = $response["Data"]["PaymentURL"];
+                    $payment->customer_reference = $response["Data"]["CustomerReference"];
+                    $data = json_decode($data);
+                    $payment->payment_method_id = $data->PaymentMethodId;
+                    $payment->customer_name = $data->CustomerName ?: null;
+                    $payment->customer_email = $data->CustomerEmail ?: null;
 
-                //create new payment entry in the database
-                $payment = new MyFatoorah();
-                $payment->invoice_id = $response["Data"]["InvoiceId"];
-                $payment->payment_url = $response["Data"]["PaymentURL"];
-                $payment->customer_reference = $response["Data"]["CustomerReference"];
-                $data=json_decode($data);
-                $payment->payment_method_id = $data->PaymentMethodId;
-                $payment->customer_name= $data->CustomerName?:null;
-                $payment->customer_email= $data->CustomerEmail?:null;
+                    $payment->save();
 
-                $payment->save();
-
-                return $response["Data"]["PaymentURL"];
+                    return $response["Data"]["PaymentURL"];
+                }catch (\Exception $e){
+                    \Log::error("Error while generating myfatoorah payment url.\nData:\n".json_encode($data)."\nResponse:\n".json_encode($response['data'])."\nErrors:\n" . json_encode($e));
+                    abort(500, 'Something went wrong while processing payment');
+                }
 
             }
             else {
-                return $response["ValidationErrors"];
+                \Log::error("Validation errors while generating payment url.\nData:\n$data\nErrors:\n" . json_encode($response));
+                abort(500, 'Something went wrong while processing payment');
             }
         }
     }
@@ -123,35 +130,39 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
         $response = json_decode($response, true);
 
         if ($err) {
-
-            return ['error' => 1, 'message' => 'There is an error happened'];
-
+            \Log::error("Curl error while gverifying myfatoorah payment.\nError:\n" . json_encode($err));
+            abort(500, 'Something went wrong while verifying payment');
         } else {
-            $payment = $this->getPayment($response["Data"]["InvoiceId"]);
-            $status=$response["Data"]["InvoiceStatus"];
-            $track_id=$response["Data"]["CustomerReference"];
+            try {
+                $payment = $this->getPayment($response["Data"]["InvoiceId"]);
+                $status = $response["Data"]["InvoiceStatus"];
+                $track_id = $response["Data"]["CustomerReference"];
 
-            $returnResponse=new \stdClass();
-            $returnResponse->track_id= $track_id;
+                $returnResponse = new \stdClass();
+                $returnResponse->track_id = $track_id;
 
-            //update payment in database if paid
-            if($status=='Paid'){
+                //update payment in database if paid
+                if ($status == 'Paid') {
 
-                //get payment from database
-                $payment->invoice_status = $status;
-                $payment->currency = $response["Data"]["InvoiceTransactions"][0]["Currency"];
-                $payment->payment_method = $response["Data"]["InvoiceTransactions"][0]["PaymentGateway"];
-                $payment->payment_id = $response["Data"]["InvoiceTransactions"][0]["PaymentId"];
-                $payment->invoice_value = $response["Data"]["InvoiceTransactions"][0]["TransationValue"];
-                $payment->json = $responseData;
-                $payment->save();
+                    //get payment from database
+                    $payment->invoice_status = $status;
+                    $payment->currency = $response["Data"]["InvoiceTransactions"][0]["Currency"];
+                    $payment->payment_method = $response["Data"]["InvoiceTransactions"][0]["PaymentGateway"];
+                    $payment->payment_id = $response["Data"]["InvoiceTransactions"][0]["PaymentId"];
+                    $payment->invoice_value = $response["Data"]["InvoiceTransactions"][0]["TransationValue"];
+                    $payment->json = $responseData;
+                    $payment->save();
 
-                $returnResponse->status=true;
+                    $returnResponse->status = true;
+                    return $returnResponse;
+                }
+
+                $returnResponse->status = false;
                 return $returnResponse;
+            }catch(\Exception $e){
+                \Log::error("Error while generating myfatoorah payment url.\nData:\n$data\nErrors:\n" . json_encode($response));
+                abort(500, 'Something went wrong while processing payment');
             }
-
-            $returnResponse->status= false;
-            return $returnResponse;
 
         }
 

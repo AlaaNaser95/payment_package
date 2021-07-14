@@ -65,14 +65,15 @@ class PaypalGateway implements PaymentInterface
             $paypalPayment->approval_link=$payment->getApprovalLink();
             $paypalPayment->track_id=$data->trackId;
             $paypalPayment->save();
-            
+
             return $approvalURL;
         }
         catch ( PayPalConnectionException $ex) {
-            echo $ex->getCode(); // Prints the Error Code
-            echo $ex->getData(); // Prints the detailed error message
-            die($ex);
+            \Log::error("Error while generating paypal payment url.\nData:\n".json_encode($data)."\nPaypal Errors:\n" . json_encode($ex));
+            abort(500, 'Something went wrong while processing payment');
         } catch (Exception $ex) {
+            \Log::error("Error while generating paypal payment url.\nData:\n".json_encode($data)."\nErrors:\n" . json_encode($ex));
+            abort(500, 'Something went wrong while processing payment');
         }
 
     }
@@ -103,7 +104,7 @@ class PaypalGateway implements PaymentInterface
 
         $returnResponse = new \stdClass();
         $returnResponse->track_id=$internalPayment->track_id;
-        
+
         try {
             if($checkPayment){
                 // Execute payment
@@ -117,17 +118,17 @@ class PaypalGateway implements PaymentInterface
             $internalPayment->update_time=$result->getUpdateTime();
             $internalPayment->save();
 
-            if ($result->getState() == 'approved') 
+            if ($result->getState() == 'approved')
                 $returnResponse->status=true;
             else
                 $returnResponse->status=false;
             return $returnResponse;
         } catch (PayPal\Exception\PayPalConnectionException $ex) {
-            echo $ex->getCode();
-            echo $ex->getData();
-            die($ex);
+            \Log::error("Error while verifying paypal payment url.\nData:\n".json_encode(request()->all())."\nPaypal Errors:\n" . json_encode($ex));
+            abort(500, 'Something went wrong while processing payment');
         } catch (Exception $ex) {
-            die($ex);
+            \Log::error("Error while generating paypal payment url.\nData:\n".json_encode(request()->all())."\nErrors:\n" . json_encode($ex));
+            abort(500, 'Something went wrong while processing payment');
         }
     }
 

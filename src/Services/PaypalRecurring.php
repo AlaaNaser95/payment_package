@@ -19,7 +19,6 @@ use PayPal\Api\PatchRequest;
 use PayPal\Common\PayPalModel;
 use PayPal\Api\Payer;
 use PayPal\Api\AgreementStateDescriptor;
-use beinmedia\payment\Services\Curl;
 
 class PaypalRecurring extends Curl
 {
@@ -75,8 +74,8 @@ class PaypalRecurring extends Curl
             $this->updatePlan($createdPlan);
 
         } catch (Exception $ex) {
-            $this->customLog('info', 'plan not created or not updated ', ["Created Plan", "Plan", null, $plan, $ex]);
-            die($ex);
+            \Log::error("Error while generating paypal plan.\nData:\n".json_encode($planParam)."\nErrors:\n" . json_encode($ex)."\nPlan\n".json_encode($plan));
+            abort(500, 'Something went wrong while processing payment');
         }
             $internallyCreatedPlan = OurPlan::create([
                 'gateway' => 'paypal',
@@ -174,7 +173,8 @@ class PaypalRecurring extends Curl
             $approvalUrl = $createdAgreement->getApprovalLink();
             return $approvalUrl;
         } catch (Exception $ex) {
-            return $ex->getMessage();
+            \Log::error("Error while generating paypal plan.\nData:\n".json_encode(compact('plan_id','name','description','payer_info','reference_id'))."\nErrors:\n" . json_encode($ex));
+            abort(500, 'Something went wrong while processing payment');
         }
     }
 
@@ -345,68 +345,73 @@ class PaypalRecurring extends Curl
 
     public function handleWebHook()
     {
-
-        $data = request('resource');
-
-        $event_type=request('event_type');
-
-        if ($event_type == 'PAYMENT.SALE.COMPLETED') {
-
-            $agreementId = $data['billing_agreement_id'];
-            $agreement = $this->getAgreement($agreementId);
-
-            $agreementDetails = $agreement->getAgreementDetails();
-
-
-
-            //save the payment in database
-            $recurring = new Recurring();
-            $recurring->state = $data['state'];
-            $recurring->pay_id = $data['id'];
-            $recurring->agreement_id = $data['billing_agreement_id'];
-            $recurring->payment_date = $data['create_time'];
-            $recurring->amount = $data['amount']['total'];
-            $recurring->currency= $data['amount']['currency'];
-            $recurring->save();
-
-            //update agreement in database
-            $ourAgreement = Agreement::where('agreement_id', $agreementId)->first();
-            $ourAgreement->next_billing_date = $agreementDetails->getNextBillingDate();
-            $ourAgreement->last_payment_date = $agreementDetails->getLastPaymentDate();
-            $ourAgreement->cycles_remaining = $agreementDetails->getCyclesRemaining();
-            $ourAgreement->cycles_completed = $agreementDetails->getCyclesCompleted();
-            $ourAgreement->save();
-
-            $response = new \stdClass();
-            $response->event_type = $event_type;
-            $response->agreement_id = $agreementId;
-            $response->payment_id = $data['id'];
-
-        }
-
-        if ( ( $event_type == 'BILLING.SUBSCRIPTION.CANCELLED' ) || ( $event_type == 'BILLING.SUBSCRIPTION.SUSPENDED' ) ) {
-
-            $agreementId = $data['id'];
-            $agreement = $this->getAgreement($agreementId);
-
-            //update agreement state in databse
-            $ourAgreement = Agreement::where('agreement_id', $agreementId)->first();
-            $ourAgreement->state = $agreement->getState();
-            $ourAgreement->save();
-            $response = new \stdClass();
-            $response->event_type = $event_type;
-            $response->agreement_id = $agreementId;
-        }
-
-        //$url=env('RECURRING_NOTIFICATION_URL','');
-
         try {
+            $data = request('resource');
+
+            $event_type = request('event_type');
+
+            if ($event_type == 'PAYMENT.SALE.COMPLETED') {
+                try {
+
+                    $agreementId = $data['billing_agreement_id'];
+                    $agreement = $this->getAgreement($agreementId);
+
+                    $agreementDetails = $agreement->getAgreementDetails();
+
+
+                    //save the payment in database
+                    $recurring = new Recurring();
+                    $recurring->state = $data['state'];
+                    $recurring->pay_id = $data['id'];
+                    $recurring->agreement_id = $data['billing_agreement_id'];
+                    $recurring->payment_date = $data['create_time'];
+                    $recurring->amount = $data['amount']['total'];
+                    $recurring->currency = $data['amount']['currency'];
+                    $recurring->save();
+
+                    //update agreement in database
+                    $ourAgreement = Agreement::where('agreement_id', $agreementId)->first();
+                    $ourAgreement->next_billing_date = $agreementDetails->getNextBillingDate();
+                    $ourAgreement->last_payment_date = $agreementDetails->getLastPaymentDate();
+                    $ourAgreement->cycles_remaining = $agreementDetails->getCyclesRemaining();
+                    $ourAgreement->cycles_completed = $agreementDetails->getCyclesCompleted();
+                    $ourAgreement->save();
+
+                    $response = new \stdClass();
+                    $response->event_type = $event_type;
+                    $response->agreement_id = $agreementId;
+                    $response->payment_id = $data['id'];
+                } catch (\Exception $e) {
+                    \Log::error("Error while handling paypal payment webhook.\nData:\n" . json_encode(request()->all()) . "\nErrors:\n" . json_encode($e));
+                    abort(500, 'Something went wrong while processing payment');
+                }
+
+            }
+
+            if (($event_type == 'BILLING.SUBSCRIPTION.CANCELLED') || ($event_type == 'BILLING.SUBSCRIPTION.SUSPENDED')) {
+                try {
+                    $agreementId = $data['id'];
+                    $agreement = $this->getAgreement($agreementId);
+
+                    //update agreement state in databse
+                    $ourAgreement = Agreement::where('agreement_id', $agreementId)->first();
+                    $ourAgreement->state = $agreement->getState();
+                    $ourAgreement->save();
+                    $response = new \stdClass();
+                    $response->event_type = $event_type;
+                    $response->agreement_id = $agreementId;
+                } catch (\Exception $e) {
+                    \Log::error("Error while processing cancelling paypal agreement webhook.\nData:\n" . json_encode(request()->all()) . "\nErrors:\n" . json_encode($e));
+                    abort(500, 'Something went wrong while processing paypal webhook');
+                }
+            }
+
+            //$url=env('RECURRING_NOTIFICATION_URL','');
             return $data;
         }
         catch(Exception $ex){
-            \Log::debug($ex);
-            die($ex);
-
+            \Log::error("Error while handling paypal webhook.\nData:\n".json_encode(request()->all())."\nErrors:\n" . json_encode($ex));
+            abort(500, 'Something went wrong while processing paypal webhook');
         }
     }
 
