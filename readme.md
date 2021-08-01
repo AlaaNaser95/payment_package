@@ -228,6 +228,75 @@ use MyFatoorahPayment;
 $paypal_payment = MyFatoorahPayment::getPayment($payment_id);
 ```
 
+* *refund(string $key, string $keyType = 'InvoiceId', $comment="", bool $serviceOnCustomer, bool $refundOnCustomer, float $amount = null)*
+
+This method will refund the invoice partially or totally according to $amount. If amount is null then total amount will be refunded.
+
+Available options for $keyType: 'InvoiceId' or 'PaymentId'
+
+``` bash
+use MyFatoorahPayment;
+
+$refund = MyFatoorahPayment::refund(54432);
+```
+
+* *refundByReference(string $customerReference, $comment="", bool $serviceOnCustomer, bool $refundOnCustomer, float $amount = null)*
+
+This method will refund the invoice by customer_reference. The last invoice with the same customer_reference will be refunded.
+
+``` bash
+use MyFatoorahPayment;
+
+$refund = MyFatoorahPayment::refundByReference("Ali's Invoice 123");
+```
+
+Example refund success Response:
+
+``` bash
+{
+refund: {
+invoice_id: 918797,
+amount: 10,
+comment: "test",
+service_on_customer: false,
+refund_on_customer: false,
+refund_id: 14341,
+refund_reference: "2021000488",
+customer_reference: "25",
+updated_at: "2021-08-01 12:28:46",
+created_at: "2021-08-01 12:28:46",
+id: 6
+},
+success: true,
+errors: null
+}
+```
+
+Example refund Failed Response:
+
+``` bash
+{
+success: false,
+errors: [
+{
+Name: "Amount",
+Error: "Insufficient Balance for vendor"
+}
+],
+refund: null
+}
+```
+
+* *refundsList()*
+
+This method will return all refunds list.
+
+``` bash
+use MyFatoorahPayment;
+
+$refunds = MyFatoorahPayment::refundsList();
+```
+
 ---
 ### Tap payment Gateway
 > **Configuration**

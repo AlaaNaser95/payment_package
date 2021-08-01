@@ -3,6 +3,7 @@
 
 namespace beinmedia\payment\Services;
 use beinmedia\payment\models\MyFatoorah;
+use beinmedia\payment\models\MyFatoorahRefund;
 use beinmedia\payment\Parameters\MyfatoorahParam;
 
 class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\PaymentInterface
@@ -174,4 +175,77 @@ class MyFatoorahGateway extends Curl implements \beinmedia\payment\Services\Paym
     public function getPayment($invoice_Id){
         return MyFatoorah::where('invoice_id',$invoice_Id)->first();
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function refundByReference(string $reference, string $comment = '', bool $serviceOnCustomer = false, bool $refundOnCustomer = false, $amount = null)
+    {
+        $invoice = MyFatoorah::where('customer_reference', $reference)->where('invoice_status', 'Paid')->latest('id')->first() ?? null;
+        if (!$invoice) {
+            \Log::error("Error while making refund for reference: $reference for myfatoorah gateway. Paid Invoice was not found");
+            abort(500, 'Something went wrong while processing refund');
+        }
+        return $this->refund($invoice->invoice_id, 'InvoiceId', $comment, $serviceOnCustomer, $refundOnCustomer, $amount);
+    }
+
+    public function refund(string $key, string $keyType = 'InvoiceId', string $comment = '', bool $serviceOnCustomer = false, bool $refundOnCustomer = false, $amount = null)
+    {
+        $key_types_columns = ['InvoiceId' => 'invoice_id', 'PaymentId' => 'payment_id'];
+        if (!in_array($keyType, array_keys($key_types_columns))) {
+            \Log::error("Error while making refund for id = $key on key type: $keyType for myfatoorah gateway");
+            abort(500, 'Something went wrong while processing refund');
+        }
+        $invoice = MyFatoorah::where("$key_types_columns[$keyType]", $key)->where('invoice_status', 'Paid')->first() ?? null;
+        if (!$invoice) {
+            \Log::error("Error while making refund for id = $key on key type: $keyType for myfatoorah gateway. Paid invoice was not found");
+            abort(500, 'Something went wrong while processing refund');
+        }
+        $data = new \stdClass();
+        $data->Key = $key;
+        $data->KeyType = $keyType;
+        $data->Amount = $amount ?: $invoice->invoice_value;
+        $data->Comment = $comment;
+        $data->ServiceChargeOnCustomer = $serviceOnCustomer;
+        $data->RefundChargeOnCustomer = $refundOnCustomer;
+        $data = json_encode($data);
+
+        $result = $this->postCurl(($this->baseURL . "/MakeRefund"), $data, env('MYFATOORAH_API_KEY'));
+        $response = $result->response;
+        $err = $result->err;
+        $response = json_decode($response, true);
+
+        if ($err) {
+            \Log::error("Curl error while processing refunds.\nError:\n" . json_encode($err));
+            abort(500, 'Something went wrong while processing refund');
+        } else {
+            try {
+                if ($response['IsSuccess']) {
+                    $refund = MyFatoorahRefund::create([
+                        "invoice_id" => $invoice->invoice_id,
+                        "amount" => $response['Data']['Amount'],
+                        "comment" => $response['Data']['Comment'],
+                        "service_on_customer" => $serviceOnCustomer,
+                        "refund_on_customer" => $refundOnCustomer,
+                        "refund_id" => $response['Data']['RefundId'],
+                        "refund_reference" => $response['Data']['RefundReference'],
+                        "customer_reference" => $invoice->customer_reference,
+                    ]);
+                    return compact('refund') + ['success'=> true, 'errors' => null];
+                } else{
+                    \Log::error("Error while processing refund.\nRequest Data:\n" . json_encode($data) . "\nResponse:\n" . json_encode($response));
+                    return ['success'=> false, 'errors' => $response['ValidationErrors'] ?? null, 'refund' => null];
+                }
+            } catch (\Exception $e) {
+                \Log::error("Error while processing refund.\nRequest Data:\n" . json_encode($data) . "\nResponse:\n" . json_encode($response) . "\nError:\n" . $e->getMessage());
+                abort(500, 'Something went wrong while processing refund');
+            }
+        }
+    }
+
+    public function refundsList()
+    {
+        return MyFatoorahRefund::all();
+    }
+
+
 }
