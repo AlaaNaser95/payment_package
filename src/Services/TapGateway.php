@@ -206,7 +206,7 @@ class TapGateway extends Curl implements PaymentInterface
                         $charge->status = "CAPTURED";
                         $charge->json = $jsonResponse;
                         $charge->payment_method = $response['source']['payment_method'];
-                        $charge->card_id = (array_key_exists('card', $response) && array_key_exists('id', $response['card'])) ? $response['card']['id'] : null;
+                        $charge->card_id = $charge->card_id ?? ((array_key_exists('card', $response) && array_key_exists('id', $response['card'])) ? $response['card']['id'] : null);
                         $charge->customer_id = array_key_exists('id', $customer = $response['customer']) ? $customer['id'] : null;
                         $charge->save();
                         $returnResponse->card_id = $charge->card_id;
@@ -619,7 +619,7 @@ class TapGateway extends Curl implements PaymentInterface
     public function verifySubscriptionPayment()
     {
         try {
-            $payment = Tap::create(['charge_id' => request('charge.id'), 'amount' => request('charge.amount'), 'currency' => request('charge.currency'), 'status' => request('charge.status'), 'track_id' => request('metadata.track_id'), 'source_id' => request('charge.source.id'), 'transaction_created' => request('charge.transaction.created'), 'customer_id' => request('charge.customer.id'), 'card_id' => request('charge.source.id'), 'subscription_id' => request('id')]);
+            $payment = Tap::create(['charge_id' => request('charge.id'), 'amount' => request('charge.amount'), 'currency' => request('charge.currency'), 'status' => request('charge.status'), 'track_id' => request('charge.metadata.track_id'), 'source_id' => request('charge.source.id'), 'transaction_created' => request('charge.transaction.created'), 'customer_id' => request('charge.customer.id'), 'card_id' => request('charge.source.id'), 'subscription_id' => request('id')]);
             $result = new \stdClass();
             $result->customer_id = $payment->customer_id;
             $result->card_id = $payment->card_id;
