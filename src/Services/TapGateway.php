@@ -170,63 +170,23 @@ class TapGateway extends Curl implements PaymentInterface
     /**
      * @return \stdClass
      */
-    public function isPaymentExecuted()
+    public function isPaymentExecuted($chargeId = null)
     {
         //check request method
         $requestMethod = $_SERVER['REQUEST_METHOD'];
-        $chargeId = request('tap_id');
+        $normalCheck = $chargeId ? true : false;
+        $chargeId = $chargeId ?? request('tap_id');
         if (is_null($chargeId)) {
             $chargeId = request('charge.id');
         }
 
         //if reredictURl is given in the request body
-        if ($requestMethod == 'GET' || !empty(request('charge.id'))) {
+        if ($requestMethod == 'GET' || !empty(request('charge.id')) || $normalCheck) {
 
             //retrieve charge
-            //result gives error
-            $result = $this->getCurl("https://api.tap.company/v2/charges/$chargeId", env('TAP_API_KEY'));
-            $jsonResponse = $result->response;
-            $err = $result->err;
-            $response = json_decode($jsonResponse, true);
+            //result may give error
+            return $this->processSynchronousTapCharge($chargeId);
 
-            if ($err) {
-                \Log::error("Curl error while verifying tap payment.\nError:\n" . json_encode($err));
-                abort(500, 'Something went wrong while verifying payment');
-            } else {
-                try {
-                    $charge = $this->getPayment($chargeId);
-                    $returnResponse = new \stdClass();
-                    $returnResponse->track_id = $charge->track_id;
-                    $returnResponse->card_id = $charge->card_id;
-                    $returnResponse->customer_id = $charge->customer_id;
-                    $returnResponse->tap_id = $charge->charge_id;
-                    if ($response['status'] == 'CAPTURED' or $response['status'] == 'APPROVED') {
-
-                        //update charge entry in database
-                        $charge->status = "CAPTURED";
-                        $charge->json = $jsonResponse;
-                        $charge->payment_method = $response['source']['payment_method'];
-                        $charge->card_id = $charge->card_id ?? ((array_key_exists('card', $response) && array_key_exists('id', $response['card'])) ? $response['card']['id'] : null);
-                        $charge->customer_id = array_key_exists('id', $customer = $response['customer']) ? $customer['id'] : null;
-                        $charge->save();
-                        $returnResponse->card_id = $charge->card_id;
-                        $returnResponse->customer_id = $charge->customer_id;
-
-                        $returnResponse->status = true;
-                        return $returnResponse;
-                    } else
-                        $charge->status = $response['status'];
-                    $charge->json = $jsonResponse;
-                    $charge->payment_method = $response['source']['payment_method'];
-                    $charge->save();
-
-                    $returnResponse->status = false;
-                    return $returnResponse;
-                } catch (\Exception $e) {
-                    \Log::error("Error while verifying tap GET payment.\nChargeId for GET:\n" . json_encode($chargeId) . "\nResponse:\n" . json_encode($response) . "\nError:" . json_encode($e));
-                    abort(500, 'Something went wrong while verifying payment');
-                }
-            }
         } //if PostURl is given in the request body
         else {
             try {
@@ -269,6 +229,57 @@ class TapGateway extends Curl implements PaymentInterface
                 \Log::error("Error while verifying fawry payment.\nFawry returned data:\n" . json_encode(request()->all()) . "\nError:\n" . json_encode($e));
                 abort(500, 'Something went wrong while verifying fawry payment');
             }
+        }
+    }
+
+    public function getTapCharge($chargeId){
+        $result = $this->getCurl("https://api.tap.company/v2/charges/$chargeId", env('TAP_API_KEY'));
+        $jsonResponse = $result->response;
+        $err = $result->err;
+        $response = json_decode($jsonResponse, true);
+
+        if ($err) {
+            \Log::error("Curl error while verifying tap payment.\nError:\n" . json_encode($err));
+            abort(500, 'Something went wrong while verifying payment');
+        }else{
+            return compact( 'jsonResponse','response');
+        }
+    }
+
+    private function processSynchronousTapCharge($chargeId){
+        [$response, $jsonResponse] = $this->getTapCharge($chargeId);
+        try {
+            $charge = $this->getPayment($chargeId);
+            $returnResponse = new \stdClass();
+            $returnResponse->track_id = $charge->track_id;
+            $returnResponse->card_id = $charge->card_id;
+            $returnResponse->customer_id = $charge->customer_id;
+            $returnResponse->tap_id = $charge->charge_id;
+            if ($response['status'] == 'CAPTURED' or $response['status'] == 'APPROVED') {
+
+                //update charge entry in database
+                $charge->status = "CAPTURED";
+                $charge->json = $jsonResponse;
+                $charge->payment_method = $response['source']['payment_method'];
+                $charge->card_id = $charge->card_id ?? ((array_key_exists('card', $response) && array_key_exists('id', $response['card'])) ? $response['card']['id'] : null);
+                $charge->customer_id = array_key_exists('id', $customer = $response['customer']) ? $customer['id'] : null;
+                $charge->save();
+                $returnResponse->card_id = $charge->card_id;
+                $returnResponse->customer_id = $charge->customer_id;
+
+                $returnResponse->status = true;
+                return $returnResponse;
+            } else
+                $charge->status = $response['status'];
+            $charge->json = $jsonResponse;
+            $charge->payment_method = $response['source']['payment_method'];
+            $charge->save();
+
+            $returnResponse->status = false;
+            return $returnResponse;
+        } catch (\Exception $e) {
+            \Log::error("Error while verifying tap GET payment.\nChargeId for GET:\n" . json_encode($chargeId) . "\nResponse:\n" . json_encode($response) . "\nError:" . json_encode($e));
+            abort(500, 'Something went wrong while verifying payment');
         }
     }
 
@@ -584,7 +595,7 @@ class TapGateway extends Curl implements PaymentInterface
         $err = $result->err;
         if ($err) {
             \Log::error("Curl error while getting Tap Card.\nError:\n" . json_encode($err));
-            abort(500, 'Something went wrong while getting tap card');
+            abort(500, 'Something went wrong while getting tap subscription');
         }
         return json_decode($jsonResponse, true);
     }
@@ -616,17 +627,28 @@ class TapGateway extends Curl implements PaymentInterface
     /**
      * @return \stdClass
      */
-    public function verifySubscriptionPayment()
+    public function verifySubscriptionPayment($chargeId = null)
     {
         try {
-            $payment = Tap::create(['charge_id' => request('charge.id'), 'amount' => request('charge.amount'), 'currency' => request('charge.currency'), 'status' => request('charge.status'), 'track_id' => request('charge.metadata.track_id'), 'source_id' => request('charge.source.id'), 'transaction_created' => request('charge.transaction.created'), 'customer_id' => request('charge.customer.id'), 'card_id' => request('charge.source.id'), 'subscription_id' => request('id')]);
+            if($chargeId)
+                $payment = Tap::create(['charge_id' => request('charge.id'), 'amount' => request('charge.amount'), 'currency' => request('charge.currency'), 'status' => request('charge.status'), 'track_id' => request('charge.metadata.track_id'), 'source_id' => request('charge.source.id'), 'transaction_created' => request('charge.transaction.created'), 'customer_id' => request('charge.customer.id'), 'card_id' => request('charge.source.id'), 'subscription_id' => request('id')]);
+            else {
+                $charge = $this->getTapCharge($chargeId);
+                $charge = $charge->response;
+                $payment = Tap::create(['charge_id' => $charge['id'], 'amount' => $charge['amount'], 'currency' => $charge['currency'], 'status' => $charge['status'], 'track_id' => $charge['metadata']['track_id'], 'source_id' => $charge['source']['id'], 'transaction_created' => $charge['transaction']['created'], 'customer_id' => $charge['customer']['id'], 'card_id' => $charge['source']['id'], 'subscription_id' => $charge['subscription_id'], $charge['']]);
+            }
             $result = new \stdClass();
             $result->customer_id = $payment->customer_id;
             $result->card_id = $payment->card_id;
             $result->status = $payment->status;
             $result->subscription_id = $payment->subscription_id;
+            $result->charge_id = $payment->charge_id;
             return $result;
         } catch (\Exception $e) {
+            if($chargeId){
+                \Log::error("Error while processing missing tap subscription payment.\nData:\n" . request()->all() . "\nError:\n" . json_encode($e));
+                abort(500, 'Something went wrong while processing missing recurring payment');
+            }
             \Log::error("Error while verifying tap subscription payment.\nData:\n" . request()->all() . "\nError:\n" . json_encode($e));
             abort(500, 'Something went wrong while verifying recurring payment');
         }
@@ -657,6 +679,19 @@ class TapGateway extends Curl implements PaymentInterface
     public function getCapturedSubscriptionPayments($subscription_id)
     {
         return Tap::where('subscription_id', $subscription_id)->where('status', 'CAPTURED')->get();
+    }
+
+    //this function will check if there is recurring payment without notification from tap and will save it as record in database and return the same response as verify subscription payment or false if there is no missing payment
+    public function checkLastMissingSubscriptionPaymentRecord($subscription_id)
+    {
+        $subscription = $this->getTapSubscription($subscription_id);
+        $lastSubscriptionCharge = $subscription['subscription']['charges'][0] ?? null;
+        if(!$lastSubscriptionCharge)
+            return false;
+        $internalChargeRecord = $this->getPayment($lastSubscriptionCharge['charge_id']);
+        if ($internalChargeRecord)
+            return false;
+        return $this->verifySubscriptionPayment($lastSubscriptionCharge['id']);
     }
 }
 
