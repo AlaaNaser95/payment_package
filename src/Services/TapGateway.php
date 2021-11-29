@@ -247,7 +247,9 @@ class TapGateway extends Curl implements PaymentInterface
     }
 
     private function processSynchronousTapCharge($chargeId){
-        [$response, $jsonResponse] = $this->getTapCharge($chargeId);
+        $tapCharge = $this->getTapCharge($chargeId);
+        $response = $tapCharge['response'];
+        $jsonResponse = $tapCharge['jsonResponse'];
         try {
             $charge = $this->getPayment($chargeId);
             $returnResponse = new \stdClass();
@@ -634,7 +636,7 @@ class TapGateway extends Curl implements PaymentInterface
                 $payment = Tap::create(['charge_id' => request('charge.id'), 'amount' => request('charge.amount'), 'currency' => request('charge.currency'), 'status' => request('charge.status'), 'track_id' => request('charge.metadata.track_id'), 'source_id' => request('charge.source.id'), 'transaction_created' => request('charge.transaction.created'), 'customer_id' => request('charge.customer.id'), 'card_id' => request('charge.source.id'), 'subscription_id' => request('id')]);
             else {
                 $charge = $this->getTapCharge($chargeId);
-                $charge = $charge->response;
+                $charge = $charge['response'];
                 $payment = Tap::create(['charge_id' => $charge['id'], 'amount' => $charge['amount'], 'currency' => $charge['currency'], 'status' => $charge['status'], 'track_id' => $charge['metadata']['track_id'], 'source_id' => $charge['source']['id'], 'transaction_created' => $charge['transaction']['created'], 'customer_id' => $charge['customer']['id'], 'card_id' => $charge['source']['id'], 'subscription_id' => $charge['subscription_id'], $charge['']]);
             }
             $result = new \stdClass();
